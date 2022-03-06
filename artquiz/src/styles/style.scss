@@ -1,0 +1,15 @@
+@import './reset.scss';
+@import './main-page.scss';
+
+body {
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-family: "Montserrat Alternates", sans-serif;
+}
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 40px;
+}

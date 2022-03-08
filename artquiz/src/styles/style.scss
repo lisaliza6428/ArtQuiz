@@ -1,5 +1,6 @@
 @import './reset.scss';
-@import './main-page.scss';
+@import './start-page.scss';
+@import './categories.scss';
 
 body {
   background-color: black;
@@ -10,6 +11,6 @@ body {
 }
 .container {
   max-width: 1440px;
-  margin: 0 auto;
+  margin: 40px auto 0 auto;
   padding: 0 40px;
 }

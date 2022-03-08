@@ -1,0 +1,149 @@
+.header {
+  display: flex;
+  align-items: center;
+
+  * {
+    margin-right: 120px;
+    font-weight: 500;
+    font-size: 22px;
+  }
+
+  &__home-link {
+    &:hover {
+      color: #ffbca2;
+    }
+  }
+
+  &__categories {
+    color: #ffbca2;
+  }
+}
+
+.quiz-title {
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 30px;
+  color: #ffbca2;
+  margin: 30px 0 60px;
+}
+
+/////////////////////////
+.category_header_wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 60px 0;
+  @media (max-width: 600px) {
+    text-align: left;
+    align-items: flex-start;
+  }
+}
+
+.header_category {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 30px;
+  @media (max-width: 600px) {
+    flex-direction: column;
+    text-align: left;
+    align-items: flex-start;
+  }
+}
+
+.categories-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  column-gap: 25px;
+  row-gap: 50px;
+  flex-wrap: wrap;
+  &.results_ {
+    display: block;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 1400px) {
+    justify-content: center;
+  }
+  @media (max-width: 750px) {
+  }
+}
+
+.category-block {
+  margin-bottom: 20px;
+  cursor: pointer;
+
+  @media (max-width: 750px) {
+    margin-bottom: 30px;
+  }
+}
+
+.description {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  @media (max-width: 750px) {
+    font-size: 18px;
+  }
+}
+
+.category {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  @media (max-width: 750px) {
+    font-size: 18px;
+  }
+}
+.again {
+  position: absolute;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+  background-color: #ffbca2;
+  color: #000;
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 0 25px 25px;
+}
+
+.img-category {
+  width: 195px;
+  border-radius: 25px;
+  transition: 0.5s;
+  &.grey {
+    filter: grayscale(100%);
+  }
+  &.result {
+    width: 350px;
+  }
+}
+
+.box-wrapper {
+  position: relative;
+  border-radius: 25px;
+  &:hover {
+    transition: 0.5s;
+    box-shadow: 8px 8px 16px 0px #ffbca2;
+  }
+}
+
+.results {
+  //display: none;
+}
+
+.score {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 20px;
+  color: #ffbca2;
+}

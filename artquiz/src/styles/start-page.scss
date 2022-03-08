@@ -1,11 +1,12 @@
 .main {
-  display: flex;
+  // display: flex;
   flex: 1 0 auto;
   height: calc(100% - 60px);
-  align-items: center;
+  // align-items: center;
 }
 
 .main-page {
+  margin-top: 300px;
   text-align: center;
   margin-left: auto;
   margin-right: auto;

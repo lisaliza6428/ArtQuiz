@@ -4,3 +4,7 @@ import './js-modules/start-page';
 import './js-modules/localStorage';
 import './js-modules/categories-page';
 import './js-modules/functions';
+import './js-modules/consts';
+import './js-modules/question-page';
+import './js-modules/settings';
+import './js-modules/score-page';

@@ -1,4 +1,3 @@
-/* Указываем box sizing */
 *,
 *::before,
 *::after {
@@ -10,13 +9,11 @@
   user-select: none;
 }
 
-/* Убираем внутренние отступы */
 ul[class],
 ol[class] {
   padding: 0;
 }
 
-/* Убираем внешние отступы */
 body,
 h1,
 h2,
@@ -35,7 +32,6 @@ dd {
   padding: 0;
 }
 
-/* Выставляем основные настройки по-умолчанию для body */
 body {
   min-height: 100vh;
   scroll-behavior: smooth;
@@ -43,13 +39,11 @@ body {
   line-height: 1.5;
 }
 
-/* Удаляем стандартную стилизацию для всех ul и il, у которых есть атрибут class*/
 ul[class],
 ol[class] {
   list-style: none;
 }
 
-/* Элементы a, у которых нет класса, сбрасываем до дефолтных стилей */
 a:not([class]) {
   text-decoration-skip-ink: auto;
 }
@@ -57,13 +51,12 @@ a {
   text-decoration: none;
   color: #ffffff;
 }
-/* Упрощаем работу с изображениями */
+
 img {
   max-width: 100%;
   display: block;
 }
 
-/* Наследуем шрифты для инпутов и кнопок */
 input,
 button,
 textarea,

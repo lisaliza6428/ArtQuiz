@@ -1,6 +1,7 @@
 @import './reset.scss';
 @import './start-page.scss';
 @import './categories.scss';
+@import './question-page.scss';
 
 body {
   background-color: black;
@@ -11,6 +12,6 @@ body {
 }
 .container {
   max-width: 1440px;
-  margin: 40px auto 0 auto;
+  margin: 20px auto 0 auto;
   padding: 0 40px;
 }

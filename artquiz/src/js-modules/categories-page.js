@@ -1,12 +1,13 @@
+/* eslint-disable class-methods-use-this */
 import { localStorageUtil } from './localStorage';
-import getData from './functions';
+import question from './question-page';
+import { GENRES } from './consts';
 
 class Categories {
   render() {
     const type = localStorageUtil.getQuizType();
     document.querySelector('.container').innerHTML = `
     <a class="settings" href="#/settings"><img  src="/assets/svg/settings.svg" alt="Settings"></a>
-  
     <div class="header">
       <img class="header__logo" src="assets/svg/logo.svg" alt="Logo">
       <a href="#/" class="header__home-link">Home</a>
@@ -19,7 +20,6 @@ class Categories {
   }
 
   async renderCategories() {
-    const data = await getData();
     const type = localStorageUtil.getQuizType();
     let start;
     let end;
@@ -30,18 +30,30 @@ class Categories {
       start = 120;
       end = 240;
     }
+    let cardIndex = 0;
     for (start; start < end; start += 10) {
       const div = document.createElement('div');
-      div.classList.add('category-block');
+      div.classList.add('category-card');
+      div.id = cardIndex;
       div.innerHTML = `<div class="description">
-                        <div class="category">Portrait</div>
-                        <div class="score">1/10</div>
+                        <div class="category">${GENRES[cardIndex]}</div>
+                        <a href="#/score" class="score">1/10</a>
                       </div>
-                      <div class="box-wrapper">
+                      <a href="#/question" class="box-wrapper">
                           <img class="img-category grey" src="/assets/img/${start}.webp" alt="Picture">
-                          <div class="results again">Play again</div>
-                      </div>`;
+                          <div class="results again"><img class="again-img" src="/assets/svg/again.svg">Play again</div>
+                      </a>`;
       document.querySelector('.categories-container').appendChild(div);
+      div.addEventListener('click', (e) => {
+        if (e.target.classList.contains('score')) {
+          console.log('score', div.id);
+          question.categoryIndex = +div.id;
+        } else {
+          console.log('game', div.id);
+          question.categoryIndex = +div.id;
+        }
+      });
+      cardIndex += 1;
     }
   }
 }

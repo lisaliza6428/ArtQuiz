@@ -15,10 +15,19 @@ class Question {
   timer = false;
 
   async render() {
-    this.typeOfQuiz = localStorageUtil.getQuizType();
+    let timer = '';
+    if (this.timer) {
+      timer = `
+      <div class="question-page__time-line">
+          <div class="time-line"></div>
+          <div id="line" class="time-line_red"></div>
+      </div>
+      <div class="question-page__timer"><span id="time" class="time">00:10</span></div>`;
+    }
     let container = '';
     let block = '';
     let generateQuestion;
+    this.typeOfQuiz = localStorageUtil.getQuizType();
     if (this.typeOfQuiz === 'artists') {
       container = 'question-picture-wrapper';
       block = '<div class="question-answers"></div>';
@@ -32,16 +41,12 @@ class Question {
       <div class="question-page">
           <div class="question-page__top">
             <img class="question-page__close" src="/assets/svg/close.svg" alt="">
-            <div class="question-page__time-line">
-                <div class="time-line"></div>
-                <div id="line" class="time-line_red"></div>
-            </div>
-            <div class="question-page__timer"><span id="time" class="time">00:10</span></div>
+            ${timer}
           </div>
           <p id="question" class="question"></p>
           <div class="${container}"></div>
           <div class="question-dots">
-              ${'<span class="question-dots__dot"></span>'.repeat(QUESTIONS_COUNT)}
+            ${'<span class="question-dots__dot"></span>'.repeat(QUESTIONS_COUNT)}
           </div>
           ${block}
       </div>`;
@@ -56,14 +61,13 @@ class Question {
     document.querySelector('.question-answers').addEventListener('click', (e) => {
       e.stopPropagation();
       if (e.target.classList.contains('correct')) {
-        const arr = localStorageUtil.getAnswersArray();
-        arr[data[this.currentQustionIndex].imageNum] = '1';
-        localStorageUtil.setAnswersArray(arr);
+        this.updateAnswersArray('1', data);
         this.correctAnswerCount += 1;
         e.target.classList.add('correct-answer');
         document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('correct');
         this.showAnswer(data, 'correct');
       } else {
+        this.updateAnswersArray('0', data);
         this.showAnswer(data, 'wrong');
         e.target.classList.add('wrong-answer');
         document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('wrong');
@@ -75,7 +79,7 @@ class Question {
     const data = await this.getRoundData();
     document.getElementById('question').innerHTML = `<div>Which is <span class = "colored">${data[this.currentQustionIndex].authorEN}</span> picture?</div>`;
     const picturesContainer = document.querySelector('.pictures-container');
-    const wrongAnswersArr = await
+    const wrongAnswers = await
     this.generateWrongVariants(data[this.currentQustionIndex].imageNum);
     const arrayAnswers = [
       `<div class="image-wrapper correct">
@@ -83,35 +87,29 @@ class Question {
         <div class="image-wrapper__bg"></div>
       </div>`,
       `<div class="image-wrapper">
-        <img class="image-wrapper__picture" src="/assets/img/${wrongAnswersArr[0]}.webp" alt="">
+        <img class="image-wrapper__picture" src="/assets/img/${wrongAnswers[0]}.webp" alt="">
         <div class="image-wrapper__bg"></div>
       </div>`,
       `<div class="image-wrapper">
-        <img class="image-wrapper__picture" src="/assets/img/${wrongAnswersArr[1]}.webp" alt="">
+        <img class="image-wrapper__picture" src="/assets/img/${wrongAnswers[1]}.webp" alt="">
         <div class="image-wrapper__bg"></div>
       </div>`,
       `<div class="image-wrapper">
-          <img class="image-wrapper__picture" src="/assets/img/${wrongAnswersArr[2]}.webp" alt="">
+          <img class="image-wrapper__picture" src="/assets/img/${wrongAnswers[2]}.webp" alt="">
           <div class="image-wrapper__bg"></div>
       </div>`,
     ];
-    const randomPictures = shuffle(arrayAnswers);
-    picturesContainer.innerHTML = randomPictures.join('');
+    picturesContainer.innerHTML = shuffle(arrayAnswers).join('');
 
     picturesContainer.addEventListener('click', (e) => {
       if (e.target.closest('.correct')) {
-        const arr = localStorageUtil.getAnswersArray();
-        arr[data[this.currentQustionIndex].imageNum] = '1';
-        localStorageUtil.setAnswersArray(arr);
+        this.updateAnswersArray('1', data);
         this.correctAnswerCount += 1;
         e.target.closest('.image-wrapper__bg').classList.add('correct-answer');
         document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('correct');
         this.showAnswer(data, 'correct');
       } else {
-        const arr = localStorageUtil.getAnswersArray();
-        arr[data[this.currentQustionIndex].imageNum] = '0';
-        localStorageUtil.setAnswersArray(arr);
-
+        this.updateAnswersArray('0', data);
         this.showAnswer(data, 'wrong');
         e.target.closest('.image-wrapper__bg').classList.add('wrong-answer');
         document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('wrong');
@@ -119,19 +117,25 @@ class Question {
     }, { once: true });
   }
 
+  updateAnswersArray(answer, data) {
+    const arr = localStorageUtil.getAnswersArray();
+    arr[data[this.currentQustionIndex].imageNum] = `${answer}`;
+    localStorageUtil.setAnswersArray(arr);
+  }
+
   showAnswer(data, param) {
     const modalContainer = document.querySelector('.modal');
-    const html = `<div class="modal-window">
-                    <div class="modal-content">
-                    <div class="modal-image">
-                        <img class="modal-image__picture" src="/assets/img/${data[this.currentQustionIndex].imageNum}.webp" alt="">
-                        <img class="modal-image__icon" src="/assets/svg/${param}-answer.svg" alt="">
-                    </div> 
-                    <div class="picture-name">${data[this.currentQustionIndex].nameEN}</div>
-                    <div class="picture-info">${data[this.currentQustionIndex].authorEN}, ${data[this.currentQustionIndex].year}</div>
-                    <button id="next" class="button next">Next</button>
-                  </div>
-                `;
+    const html = `
+    <div class="modal-window">
+      <div class="modal-content">
+      <div class="modal-image">
+          <img class="modal-image__picture" src="/assets/img/${data[this.currentQustionIndex].imageNum}.webp" alt="">
+          <img class="modal-image__icon" src="/assets/svg/${param}-answer.svg" alt="">
+      </div> 
+      <div class="picture-name">${data[this.currentQustionIndex].nameEN}</div>
+      <div class="picture-info">${data[this.currentQustionIndex].authorEN}, ${data[this.currentQustionIndex].year}</div>
+      <button id="next" class="button next">Next</button>
+    </div>`;
     modalContainer.innerHTML = html;
     const nextButton = document.getElementById('next');
     nextButton.addEventListener('click', () => {
@@ -144,18 +148,19 @@ class Question {
           this.generatePicturesQuestion();
         }
       } else {
-        modalContainer.innerHTML = `<div class="modal-window">
-                                      <div class="modal-content">
-                                        <div class="modal_round_results">
-                                        <img class="cup" src="/assets/svg/finish_round_cup.svg" width ="166" alt="">
-                                        <div class="congratulations">Congratulations!</div>
-                                        <div class="results">${this.correctAnswerCount}/${QUESTIONS_COUNT}!</div>
-                                        <div class="results_buttons_wrapper">
-                                            <a href="#/" class="button results_button">Home</a>
-                                            <button id = "newRound" class="button results_button">Next Quiz</button>
-                                        </div>
-                                      </div>
-                                    </div>`;
+        modalContainer.innerHTML = `
+        <div class="modal-window">
+          <div class="modal-content">
+            <div class="modal_round_results">
+            <img class="cup" src="/assets/svg/finish_round_cup.svg" width ="166" alt="">
+            <div class="congratulations">Congratulations!</div>
+            <div class="results">${this.correctAnswerCount}/${QUESTIONS_COUNT}!</div>
+            <div class="results_buttons_wrapper">
+                <a href="#/" class="button results_button">Home</a>
+                <button id = "newRound" class="button results_button">Next Quiz</button>
+            </div>
+          </div>
+        </div>`;
         this.correctAnswerCount = 0;
       }
     });
@@ -169,8 +174,7 @@ class Question {
       `<button class="button answer">${wrongAnswers[1]}</button>`,
       `<button class="button answer">${wrongAnswers[2]}</button>`,
     ];
-    const randomAnswers = shuffle(array);
-    return randomAnswers.join('');
+    return shuffle(array).join('');
   }
 
   async generateWrongVariants(correct) {

@@ -23,6 +23,7 @@ class StartPage {
   };
 
   render = () => {
+    document.querySelector('.modal').innerHTML = '';
     document.querySelector('.container').innerHTML = `<a class="settings" href="#/settings"><img  src="/assets/svg/settings.svg" alt="Settings"></a>
     <div class="main-page-container">
     <div class="main-page">

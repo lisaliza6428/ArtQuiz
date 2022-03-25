@@ -1,8 +1,6 @@
 .main {
-  // display: flex;
   flex: 1 0 auto;
   height: calc(100% - 60px);
-  // align-items: center;
 }
 
 .main-page {
@@ -13,6 +11,7 @@
 
   .main-page__title {
     margin: 0 auto 80px auto;
+    height: 165px;
   }
 
   .main-page__button {

@@ -1,10 +1,11 @@
 /* eslint-disable class-methods-use-this */
 import { localStorageUtil } from './localStorage';
 import question from './question-page';
-import { GENRES } from './consts';
+import { GENRES, QUESTIONS_COUNT } from './consts';
 
 class Categories {
   render() {
+    document.querySelector('.modal').innerHTML = '';
     const type = localStorageUtil.getQuizType();
     document.querySelector('.container').innerHTML = `
     <a class="settings" href="#/settings"><img  src="/assets/svg/settings.svg" alt="Settings"></a>
@@ -21,6 +22,7 @@ class Categories {
 
   async renderCategories() {
     const type = localStorageUtil.getQuizType();
+    const arr = localStorageUtil.getAnswersArray();
     let start;
     let end;
     if (type === 'artists') {
@@ -31,13 +33,14 @@ class Categories {
       end = 240;
     }
     let cardIndex = 0;
-    for (start; start < end; start += 10) {
+    for (start; start < end; start += QUESTIONS_COUNT) {
+      const results = arr.slice(start, start + QUESTIONS_COUNT).filter((x) => x === '1').length;
       const div = document.createElement('div');
       div.classList.add('category-card');
       div.id = cardIndex;
       div.innerHTML = `<div class="description">
                         <div class="category">${GENRES[cardIndex]}</div>
-                        <a href="#/score" class="score">1/10</a>
+                        <a href="#/score" class="score">${results}/${QUESTIONS_COUNT}</a>
                       </div>
                       <a href="#/question" class="box-wrapper">
                           <img class="img-category grey" src="/assets/img/${start}.webp" alt="Picture">

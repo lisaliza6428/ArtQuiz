@@ -8,7 +8,7 @@ class Categories {
     document.querySelector('.modal').innerHTML = '';
     const type = localStorageUtil.getQuizType();
     document.querySelector('.container').innerHTML = `
-    <a class="settings" href="#/settings"><img  src="/assets/svg/settings.svg" alt="Settings"></a>
+    <a class="settings" href="#/settings"><img src="/assets/svg/settings.svg" alt="Settings"></a>
     <div class="header">
       <img class="header__logo" src="assets/svg/logo.svg" alt="Logo">
       <a href="#/" class="header__home-link">Home</a>

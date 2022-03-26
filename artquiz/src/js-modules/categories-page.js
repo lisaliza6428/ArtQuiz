@@ -35,16 +35,20 @@ class Categories {
     let cardIndex = 0;
     for (start; start < end; start += QUESTIONS_COUNT) {
       const results = arr.slice(start, start + QUESTIONS_COUNT).filter((x) => x === '1').length;
+      let none = '';
+      if (results === 0) {
+        none = 'none';
+      }
       const div = document.createElement('div');
       div.classList.add('category-card');
       div.id = cardIndex;
       div.innerHTML = `<div class="description">
                         <div class="category">${GENRES[cardIndex]}</div>
-                        <a href="#/score" class="score">${results}/${QUESTIONS_COUNT}</a>
+                        <a href="#/score" class="score ${none}">${results}/${QUESTIONS_COUNT}</a>
                       </div>
                       <a href="#/question" class="box-wrapper">
                           <img class="img-category grey" src="/assets/img/${start}.webp" alt="Picture">
-                          <div class="results again"><img class="again-img" src="/assets/svg/again.svg">Play again</div>
+                          <div class="results again ${none}"><img class="again-img" src="/assets/svg/again.svg">Play again</div>
                       </a>`;
       document.querySelector('.categories-container').appendChild(div);
       div.addEventListener('click', (e) => {

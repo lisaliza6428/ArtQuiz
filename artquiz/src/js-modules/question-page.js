@@ -2,6 +2,7 @@
 import { QUESTIONS_COUNT } from './consts';
 import { localStorageUtil } from './localStorage';
 import { shuffle, getRandomNum, getData } from './functions';
+import { sound } from './music';
 
 class Question {
   categoryIndex = 0;
@@ -12,7 +13,7 @@ class Question {
 
   typeOfQuiz;
 
-  timer = false;
+  timer = localStorageUtil.getSettings().timer;
 
   async render() {
     let timer = '';
@@ -61,12 +62,14 @@ class Question {
     document.querySelector('.question-answers').addEventListener('click', (e) => {
       e.stopPropagation();
       if (e.target.classList.contains('correct')) {
+        sound.correctAnswer();
         this.updateAnswersArray('1', data);
         this.correctAnswerCount += 1;
         e.target.classList.add('correct-answer');
         document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('correct');
         this.showAnswer(data, 'correct');
       } else {
+        sound.wrongAnswer();
         this.updateAnswersArray('0', data);
         this.showAnswer(data, 'wrong');
         e.target.classList.add('wrong-answer');
@@ -103,12 +106,14 @@ class Question {
 
     picturesContainer.addEventListener('click', (e) => {
       if (e.target.closest('.correct')) {
+        sound.correctAnswer();
         this.updateAnswersArray('1', data);
         this.correctAnswerCount += 1;
         e.target.closest('.image-wrapper__bg').classList.add('correct-answer');
         document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('correct');
         this.showAnswer(data, 'correct');
       } else {
+        sound.wrongAnswer();
         this.updateAnswersArray('0', data);
         this.showAnswer(data, 'wrong');
         e.target.closest('.image-wrapper__bg').classList.add('wrong-answer');
@@ -148,6 +153,7 @@ class Question {
           this.generatePicturesQuestion();
         }
       } else {
+        sound.finishRound();
         modalContainer.innerHTML = `
         <div class="modal-window">
           <div class="modal-content">
@@ -162,6 +168,7 @@ class Question {
           </div>
         </div>`;
         this.correctAnswerCount = 0;
+        this.currentQustionIndex = 0;
       }
     });
   }

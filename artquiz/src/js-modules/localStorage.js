@@ -3,9 +3,12 @@ export class LocalStorageUtil {
 
   answersArray;
 
+  settings;
+
   constructor() {
     this.quizType = 'quizType';
     this.answersArray = 'answersArray';
+    this.settings = 'settings';
   }
 
   getQuizType() {
@@ -31,6 +34,28 @@ export class LocalStorageUtil {
   setAnswersArray(array) {
     localStorage.setItem(this.answersArray, JSON.stringify(array));
   }
+
+  getSettings() {
+    const info = localStorage.getItem(this.settings);
+    if (info !== null) {
+      return JSON.parse(info);
+    }
+    return {
+      sound: 20,
+      timer: true,
+      timervalue: 20,
+    };
+  }
+
+  setSettings(info) {
+    localStorage.setItem(this.settings, JSON.stringify(info));
+  }
 }
 
 export const localStorageUtil = new LocalStorageUtil();
+
+localStorageUtil.setSettings({
+  sound: 50,
+  timer: true,
+  timervalue: 10,
+});

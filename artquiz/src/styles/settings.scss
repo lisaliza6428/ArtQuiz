@@ -1,0 +1,276 @@
+.header-settings {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px 0 0 0;
+}
+
+.links-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.setting {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 28px;
+  margin-left: 10px;
+}
+.close {
+  cursor: pointer;
+}
+
+.typeOuiz {
+  margin: 120px 20px 0 20px;
+  padding: 0;
+  cursor: pointer;
+  width: 287px;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 22px;
+}
+
+.settings-item {
+  color: #ffffff;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 34px;
+  line-height: 28px;
+  margin: 60px 0 40px 0;
+
+  &.inactive {
+    color: gray;
+  }
+  @media (max-width: 530px) {
+    font-weight: 500;
+    font-size: 30px;
+  }
+}
+
+.sound-bar {
+  cursor: pointer;
+  height: 8px;
+  width: 490px;
+  margin-bottom: 10px;
+  outline: none;
+  -webkit-appearance: none;
+  @media (max-width: 750px) {
+    width: 100%;
+  }
+}
+
+.sound-bar::-webkit-slider-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  -webkit-appearance: none;
+  background: #ffffff;
+}
+
+.sound-bar-bottom {
+  width: 490px;
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 750px) {
+    width: 100%;
+  }
+}
+
+.button-switch {
+  display: inline-block;
+  cursor: pointer;
+  font-size: 16px;
+  height: 26px;
+  position: relative;
+  width: 72px;
+  margin: 0 0 0 20px;
+
+  .lbl-off,
+  .lbl-on {
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 16px;
+    position: absolute;
+    top: 5px;
+    transition: opacity 0.25s ease-out 0.1s;
+    color: #fefefe;
+  }
+
+  .lbl-off {
+    right: 18px;
+  }
+
+  .lbl-on {
+    opacity: 0;
+    left: 12px;
+  }
+}
+.switch {
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  height: 0;
+  font-size: 17px;
+  left: 0;
+  line-height: 0;
+  outline: none;
+  position: absolute;
+  top: 0;
+  width: 0;
+  color: #fefefe;
+  &:before,
+  &:after {
+    content: "";
+    font-size: 17px;
+    position: absolute;
+    color: #fefefe;
+  }
+
+  &:before {
+    border-radius: 20px;
+    background: black;
+    border: 2px solid #ffffff;
+    height: 33px;
+    left: -7px;
+    top: -4px;
+    transition: background-color 0.25s ease-out 0.1s;
+    width: 72px;
+    color: #fefefe;
+  }
+
+  &:after {
+    box-shadow: 0 2px 4px 0 #666;
+    border-radius: 50%;
+    background: #fefefe;
+    height: 24px;
+    transform: translate(0, 0);
+    transition: transform 0.25s ease-out 0.1s;
+    width: 24px;
+    color: #fefefe;
+  }
+
+  &:checked {
+    &:after {
+      transform: translate(35px, 0);
+      color: #fefefe;
+    }
+
+    & ~ .lbl-off {
+      opacity: 0;
+
+      color: #fefefe;
+    }
+
+    & ~ .lbl-on {
+      opacity: 1;
+
+      color: #fefefe;
+    }
+  }
+
+  &#switch_timer {
+    &:checked:before {
+      background: #ffbca2;
+      border: 2px solid #ffbca2;
+      color: #fefefe;
+    }
+  }
+}
+
+.button_timegame_container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.on_off {
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 28px;
+  color: #ffffff;
+}
+
+.numborber {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 150px;
+  height: 50px;
+  box-sizing: border-box;
+}
+
+.btnplus {
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  background: #ffffff;
+  color: #000;
+  width: 36px;
+  height: 36px;
+  border-radius: 100%;
+  border: 3px solid #ffffff;
+  font-size: 32px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    background-color: #ffbca2;
+    border: #ffbca2;
+    transition: 0.75s ease-out;
+  }
+  &:active {
+    background-color: #ffbca2;
+    border: #ffbca2;
+    transition: 0.75s ease-out;
+  }
+  &.inactive {
+    background: grey;
+    border: 3px solid grey;
+    pointer-events: none;
+  }
+}
+
+.number {
+  width: 50px;
+  height: 30px;
+  color: #ffffff;
+  background: #000;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 28px;
+  border: none;
+  outline: none;
+  margin-left: 20px;
+  text-align: center;
+}
+
+.number.inactive {
+  color: grey;
+}
+
+.default-button{
+  display: block;
+  margin: 50px 4px 4px auto;
+  @media (max-width: 750px) {
+    margin: 50px 4px 4px;
+  }
+}
+
+.wrapper.inactive{
+* {
+  color: grey;
+  .btnplus{
+    background: grey;
+    border: 3px solid grey;
+    pointer-events: none;
+    color: #000;
+  }
+  pointer-events: none;
+}
+}

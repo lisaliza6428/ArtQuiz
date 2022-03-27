@@ -1,10 +1,11 @@
-/* eslint-disable import/prefer-default-export */
+import { localStorageUtil } from './localStorage';
+
 export class Sound {
   audio;
 
   constructor() {
     this.audio = new Audio();
-    this.audio.volume = 0.2;
+    this.audio.volume = localStorageUtil.getSettings().sound / 100;
   }
 
   correctAnswer() {

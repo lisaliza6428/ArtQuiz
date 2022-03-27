@@ -29,6 +29,8 @@ const routes = [
 const router = async () => {
   const path = parseLocation();
   const { component = ErrorPage } = findComponentByPath(path, routes) || {};
+  question.currentQustionIndex = 0;
+  question.correctAnswerCount = 0;
   component.render();
 };
 

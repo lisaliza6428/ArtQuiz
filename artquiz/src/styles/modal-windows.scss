@@ -123,10 +123,36 @@
 }
 
 .results_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  width: 287px;
+  height: 62px;
+  border: 2px solid #ffffff;
+  background: none;
+  color: #ffffff;
+  border-radius: 60px;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 22px;
+  &:hover {
+    color: black;
+    background-color: #ffffff;
+    transition: 0.75s ease-out;
+  }
+  &:active {
+    color: black;
+    background-color: #ffbca2;
+    transition: 0.75s ease-out;
+    border: #ffbca2;
+  }
   width: 210px;
   border: 3px solid black;
   background: none;
   color: black;
+  border-radius: 25px;
   &:hover {
     color: black;
     background-color: #ffbca2;

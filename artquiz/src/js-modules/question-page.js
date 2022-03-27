@@ -41,7 +41,7 @@ class Question {
     document.querySelector('.container').innerHTML = `
       <div class="question-page">
           <div class="question-page__top">
-            <img class="question-page__close" src="/assets/svg/close.svg" alt="">
+            <a href="#/categories"><img class="question-page__close" src="/assets/svg/close.svg" alt=""></a>
             ${timer}
           </div>
           <p id="question" class="question"></p>
@@ -162,13 +162,13 @@ class Question {
             <div class="congratulations">Congratulations!</div>
             <div class="results">${this.correctAnswerCount}/${QUESTIONS_COUNT}!</div>
             <div class="results_buttons_wrapper">
-                <a href="#/" class="button results_button">Home</a>
-                <button id = "newRound" class="button results_button">Next Quiz</button>
+                <a href="#/" class="results_button">Home</a>
+                <a href="#/categories" class="results_button">Next Quiz</a>
             </div>
           </div>
         </div>`;
-        this.correctAnswerCount = 0;
         this.currentQustionIndex = 0;
+        this.correctAnswerCount = 0;
       }
     });
   }

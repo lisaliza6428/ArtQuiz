@@ -22,7 +22,6 @@ class SettingsPage {
   generateSoundBar() {
     const div = generateElement('div', ['wrapper'], '');
     div.innerHTML = '<p class="settings-item">Volume</p>';
-
     const input = document.createElement('input');
     input.type = 'range';
     input.min = 0;
@@ -40,7 +39,13 @@ class SettingsPage {
     input.oninput = function updateBar() {
       input.style.background = `linear-gradient(to right, #FFBCA2 0%, #FFBCA2 ${this.value}%, #C4C4C4 ${this.value}%, #C4C4C4 100%)`;
       sound.audio.volume = this.value / 100;
+    };
+
+    input.onchange = function updateBar() {
       sound.correctAnswer();
+      const info = localStorageUtil.getSettings();
+      info.sound = +input.value;
+      localStorageUtil.setSettings(info);
     };
   }
 
@@ -76,27 +81,33 @@ class SettingsPage {
     document.querySelector('.container').appendChild(div);
 
     input.addEventListener('click', () => {
+      const info = localStorageUtil.getSettings();
       if (input.checked) {
         span.innerText = 'On';
         question.timer = true;
+        info.timer = true;
+        document.querySelector('.wrapper-time-setter').classList.remove('inactive');
       } else {
         span.innerText = 'Off';
         question.timer = false;
+        info.timer = false;
+        document.querySelector('.wrapper-time-setter').classList.add('inactive');
       }
+      localStorageUtil.setSettings(info);
     });
   }
 
   generateTimerValue() {
     let div;
     if (localStorageUtil.getSettings().timer) {
-      div = generateElement('div', ['wrapper'], '');
+      div = generateElement('div', ['wrapper-time-setter'], '');
     } else {
-      div = generateElement('div', ['wrapper', 'inactive'], '');
+      div = generateElement('div', ['wrapper-time-setter', 'inactive'], '');
     }
     div.innerHTML = '<p class="settings-item">Time to answer</p>';
     const wrapper = generateElement('div', ['numborber'], '');
     const minusButton = generateElement('button', ['btnplus', 'numberbtn'], '-');
-    const input = generateElement('input', ['number'], '20');
+    const input = generateElement('input', ['number'], `${localStorageUtil.getSettings().timervalue}`);
     const plusButton = generateElement('button', ['btnplus', 'numberbtn'], '+');
     wrapper.append(minusButton, input, plusButton);
     div.appendChild(wrapper);
@@ -106,11 +117,17 @@ class SettingsPage {
       if (+input.value > 5) {
         input.value = +input.value - 5;
       }
+      const info = localStorageUtil.getSettings();
+      info.timervalue = +input.value;
+      localStorageUtil.setSettings(info);
     });
     plusButton.addEventListener('click', () => {
       if (+input.value < 30) {
         input.value = +input.value + 5;
       }
+      const info = localStorageUtil.getSettings();
+      info.timervalue = +input.value;
+      localStorageUtil.setSettings(info);
     });
   }
 
@@ -118,6 +135,10 @@ class SettingsPage {
     const button = document.createElement('button');
     button.classList.add('button', 'default-button');
     button.innerText = 'Default';
+    button.addEventListener('click', () => {
+      localStorageUtil.setSettings({ sound: 20, timer: true, timervalue: 20 });
+      this.render();
+    });
     document.querySelector('.container').appendChild(button);
   }
 }
@@ -129,7 +150,7 @@ function generateElement(el, cl, text) {
   const element = document.createElement(el);
   if (el === 'input') {
     element.type = 'number';
-    element.value = text;
+    element.value = +text;
     element.readOnly = true;
     element.max = 30;
     element.min = 5;

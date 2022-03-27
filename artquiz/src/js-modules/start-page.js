@@ -1,26 +1,7 @@
 import { localStorageUtil } from './localStorage';
 
 class StartPage {
-  main;
-
-  constructor() {
-    this.main = document.createElement('main');
-  }
-
-  renderFooter = () => {
-    this.main.classList.add('main');
-    this.main.innerHTML = '<div class="container"></div>';
-    const footer = document.createElement('footer');
-    footer.classList.add('footer');
-    footer.innerHTML = `<a class="footer__RSS-link" href="https://rs.school/js/" target="_blank"><img src="/assets/svg/rs_school.svg"
-                            alt="RSSchool">
-                        </a>
-                        <div class="footer__developer-link">App developer:
-                           <a class="developer" target="_blank" href="https://github.com/lisaliza6428">Elizaveta
-                          Ivanushenko</a> (2021)
-                        </div>`;
-    document.body.append(this.main, footer);
-  };
+  main = document.createElement('main');
 
   render = () => {
     document.querySelector('.modal').innerHTML = '';
@@ -38,6 +19,21 @@ class StartPage {
     document.getElementById('pictures-quiz').addEventListener('click', () => {
       localStorageUtil.setQuizType('pictures');
     });
+  };
+
+  renderFooter = () => {
+    this.main.classList.add('main');
+    this.main.innerHTML = '<div class="container"></div>';
+    const footer = document.createElement('footer');
+    footer.classList.add('footer');
+    footer.innerHTML = `<a class="footer__RSS-link" href="https://rs.school/js/" target="_blank"><img src="/assets/svg/rs_school.svg"
+                            alt="RSSchool">
+                        </a>
+                        <div class="footer__developer-link">App developer:
+                           <a class="developer" target="_blank" href="https://github.com/lisaliza6428">Elizaveta
+                          Ivanushenko</a> (2022)
+                        </div>`;
+    document.body.append(this.main, footer);
   };
 }
 

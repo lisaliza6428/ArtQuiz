@@ -53,9 +53,3 @@ export class LocalStorageUtil {
 }
 
 export const localStorageUtil = new LocalStorageUtil();
-
-localStorageUtil.setSettings({
-  sound: 50,
-  timer: true,
-  timervalue: 10,
-});

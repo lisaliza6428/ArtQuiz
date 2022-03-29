@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import { localStorageUtil } from './localStorage';
 import question from './question-page';
 import { GENRES, QUESTIONS_COUNT } from './consts';

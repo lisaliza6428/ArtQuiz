@@ -32,8 +32,8 @@ export class LocalStorageUtil {
   }
 
   getSettings() {
-    const info = localStorage.getItem(this.settings);
-    if (info !== null) return JSON.parse(info);
+    const settings = localStorage.getItem(this.settings);
+    if (settings !== null) return JSON.parse(settings);
     return {
       sound: 20,
       timer: true,
@@ -41,8 +41,14 @@ export class LocalStorageUtil {
     };
   }
 
-  setSettings(info) {
-    localStorage.setItem(this.settings, JSON.stringify(info));
+  setSettings(settings) {
+    localStorage.setItem(this.settings, JSON.stringify(settings));
+  }
+
+  updateSettings(field, value) {
+    const settings = this.getSettings();
+    settings[field] = value;
+    this.setSettings(settings);
   }
 }
 

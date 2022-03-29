@@ -8,4 +8,4 @@ import './js-modules/consts';
 import './js-modules/question-page';
 import './js-modules/settings';
 import './js-modules/score-page';
-import './js-modules/music';
+import './js-modules/sounds';

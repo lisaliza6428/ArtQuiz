@@ -1,6 +1,6 @@
 import { localStorageUtil } from './localStorage';
 
-export class Sound {
+export class Sounds {
   audio;
 
   constructor() {
@@ -24,4 +24,4 @@ export class Sound {
   }
 }
 
-export const sound = new Sound();
+export const sounds = new Sounds();

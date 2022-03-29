@@ -1,13 +1,13 @@
-/* eslint-disable no-use-before-define */
-import { sound } from './music';
+import { sounds } from './sounds';
 import question from './question-page';
 import { localStorageUtil } from './localStorage';
+import { generateHTMLElement } from './functions';
 
 class SettingsPage {
   render() {
     document.querySelector('.container').innerHTML = `
       <div class="header-settings">
-          <div  class="links-wrapper">
+          <div class="links-wrapper">
               <a href="#"><img class="back-arrow" src="/assets/svg/arrow.svg" alt="back"></a>
               <span class="setting">Settings</span>
           </div>
@@ -20,8 +20,6 @@ class SettingsPage {
   }
 
   generateSoundBar() {
-    const div = generateElement('div', ['wrapper'], '');
-    div.innerHTML = '<p class="settings-item">Volume</p>';
     const input = document.createElement('input');
     input.type = 'range';
     input.min = 0;
@@ -30,30 +28,30 @@ class SettingsPage {
     input.className = 'sound-bar';
     input.style.background = `linear-gradient(to right, #FFBCA2 0%, #FFBCA2 ${input.value}%, #C4C4C4 ${input.value}%, #C4C4C4 100%)`;
 
-    const wrapper = generateElement('div', ['sound-bar-bottom'], '');
+    input.oninput = function updateBar() {
+      input.style.background = `linear-gradient(to right, #FFBCA2 0%, #FFBCA2 ${this.value}%, #C4C4C4 ${this.value}%, #C4C4C4 100%)`;
+    };
+
+    input.onchange = function updateBar() {
+      sounds.audio.volume = +input.value / 100;
+      sounds.correctAnswer();
+      localStorageUtil.updateSettings('sound', +input.value);
+    };
+
+    const div = generateHTMLElement('div', ['wrapper'], '');
+    div.innerHTML = '<p class="settings-item">Volume:</p>';
+    const wrapper = generateHTMLElement('div', ['sound-bar-bottom'], '');
     wrapper.innerHTML = `<img src="/assets/svg/sound_off.svg" alt="On">
                          <img src="/assets/svg/sound_on.svg" alt="Off">`;
     div.append(input, wrapper);
     document.querySelector('.container').appendChild(div);
-
-    input.oninput = function updateBar() {
-      input.style.background = `linear-gradient(to right, #FFBCA2 0%, #FFBCA2 ${this.value}%, #C4C4C4 ${this.value}%, #C4C4C4 100%)`;
-      sound.audio.volume = this.value / 100;
-    };
-
-    input.onchange = function updateBar() {
-      sound.correctAnswer();
-      const info = localStorageUtil.getSettings();
-      info.sound = +input.value;
-      localStorageUtil.setSettings(info);
-    };
   }
 
   generateTimerSetter() {
-    const div = generateElement('div', ['wrapper'], '');
-    div.innerHTML = '<p class="settings-item">Time game</p>';
+    const div = generateHTMLElement('div', ['wrapper'], '');
+    div.innerHTML = '<p class="settings-item">Time game:</p>';
 
-    const span = generateElement('span', ['on_off'], 'On');
+    const span = generateHTMLElement('span', ['on_off'], 'On');
     div.append(span);
 
     const input = document.createElement('input');
@@ -75,40 +73,38 @@ class SettingsPage {
     labelOn.for = 'switch_timer';
     labelOn.className = 'lbl-on';
 
-    const wrapper = generateElement('div', ['button-switch'], '');
+    const wrapper = generateHTMLElement('div', ['button-switch'], '');
     wrapper.append(input, labelOff, labelOn);
     div.appendChild(wrapper);
     document.querySelector('.container').appendChild(div);
 
     input.addEventListener('click', () => {
-      const info = localStorageUtil.getSettings();
       if (input.checked) {
         span.innerText = 'On';
         question.timer = true;
-        info.timer = true;
+        localStorageUtil.updateSettings('timer', true);
         document.querySelector('.wrapper-time-setter').classList.remove('inactive');
       } else {
         span.innerText = 'Off';
         question.timer = false;
-        info.timer = false;
+        localStorageUtil.updateSettings('timer', false);
         document.querySelector('.wrapper-time-setter').classList.add('inactive');
       }
-      localStorageUtil.setSettings(info);
     });
   }
 
   generateTimerValue() {
     let div;
     if (localStorageUtil.getSettings().timer) {
-      div = generateElement('div', ['wrapper-time-setter'], '');
+      div = generateHTMLElement('div', ['wrapper-time-setter'], '');
     } else {
-      div = generateElement('div', ['wrapper-time-setter', 'inactive'], '');
+      div = generateHTMLElement('div', ['wrapper-time-setter', 'inactive'], '');
     }
-    div.innerHTML = '<p class="settings-item">Time to answer</p>';
-    const wrapper = generateElement('div', ['numborber'], '');
-    const minusButton = generateElement('button', ['btnplus', 'numberbtn'], '-');
-    const input = generateElement('input', ['number'], `${localStorageUtil.getSettings().timervalue}`);
-    const plusButton = generateElement('button', ['btnplus', 'numberbtn'], '+');
+    div.innerHTML = '<p class="settings-item">Time to answer:</p>';
+    const wrapper = generateHTMLElement('div', ['numborber'], '');
+    const minusButton = generateHTMLElement('button', ['btnplus', 'numberbtn'], '-');
+    const input = generateHTMLElement('input', ['number'], `${localStorageUtil.getSettings().timervalue}`);
+    const plusButton = generateHTMLElement('button', ['btnplus', 'numberbtn'], '+');
     wrapper.append(minusButton, input, plusButton);
     div.appendChild(wrapper);
     document.querySelector('.container').appendChild(div);
@@ -116,18 +112,15 @@ class SettingsPage {
     minusButton.addEventListener('click', () => {
       if (+input.value > 5) {
         input.value = +input.value - 5;
+        localStorageUtil.updateSettings('timervalue', +input.value);
       }
-      const info = localStorageUtil.getSettings();
-      info.timervalue = +input.value;
-      localStorageUtil.setSettings(info);
     });
+
     plusButton.addEventListener('click', () => {
       if (+input.value < 30) {
         input.value = +input.value + 5;
+        localStorageUtil.updateSettings('timervalue', +input.value);
       }
-      const info = localStorageUtil.getSettings();
-      info.timervalue = +input.value;
-      localStorageUtil.setSettings(info);
     });
   }
 
@@ -144,17 +137,3 @@ class SettingsPage {
 }
 const settingsPage = new SettingsPage();
 export default settingsPage;
-
-function generateElement(el, cl, text) {
-  const element = document.createElement(el);
-  if (el === 'input') {
-    element.type = 'number';
-    element.value = +text;
-    element.readOnly = true;
-    element.max = 30;
-    element.min = 5;
-  }
-  element.classList.add(...cl);
-  element.innerText = text;
-  return element;
-}

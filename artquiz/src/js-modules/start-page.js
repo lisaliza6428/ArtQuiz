@@ -17,7 +17,6 @@ class StartPage {
           <div class="settings-wrapper">
           <a class="settings"href="#/settings"><img src="/assets/svg/settings.svg" alt="Settings"></a>
           <a class="set" href="#/settings">Settings</a></div>
-          
       </div>
       </div>`;
       document.getElementById('artists-quiz').addEventListener('click', () => {

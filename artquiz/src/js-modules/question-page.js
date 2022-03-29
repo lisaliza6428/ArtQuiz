@@ -2,9 +2,9 @@
 import { QUESTIONS_COUNT } from './consts';
 import { localStorageUtil } from './localStorage';
 import {
-  shuffle, getRandomNum, getData, getRoundData,
+  shuffleArray, getRandomNumber, getData, getRoundData,
 } from './functions';
-import { sound } from './music';
+import { sounds } from './sounds';
 
 class Question {
   categoryIndex = 0;
@@ -69,14 +69,14 @@ class Question {
     document.querySelector('.question-answers').addEventListener('click', (e) => {
       e.stopPropagation();
       if (e.target.classList.contains('correct')) {
-        sound.correctAnswer();
+        sounds.correctAnswer();
         this.updateAnswersArray('1', data);
         this.correctAnswerCount += 1;
         e.target.classList.add('correct-answer');
         document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('correct');
         this.showAnswer(data, 'correct');
       } else {
-        sound.wrongAnswer();
+        sounds.wrongAnswer();
         this.updateAnswersArray('0', data);
         this.showAnswer(data, 'wrong');
         e.target.classList.add('wrong-answer');
@@ -111,18 +111,18 @@ class Question {
           <div class="image-wrapper__bg"></div>
       </div>`,
     ];
-    picturesContainer.innerHTML = shuffle(arrayAnswers).join('');
+    picturesContainer.innerHTML = shuffleArray(arrayAnswers).join('');
 
     picturesContainer.addEventListener('click', (e) => {
       if (e.target.closest('.correct')) {
-        sound.correctAnswer();
+        sounds.correctAnswer();
         this.updateAnswersArray('1', data);
         this.correctAnswerCount += 1;
         e.target.closest('.image-wrapper__bg').classList.add('correct-answer');
         document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('correct');
         this.showAnswer(data, 'correct');
       } else {
-        sound.wrongAnswer();
+        sounds.wrongAnswer();
         this.updateAnswersArray('0', data);
         this.showAnswer(data, 'wrong');
         e.target.closest('.image-wrapper__bg').classList.add('wrong-answer');
@@ -162,7 +162,7 @@ class Question {
           this.generatePicturesQuestion();
         }
       } else {
-        sound.finishRound();
+        sounds.finishRound();
         modalContainer.innerHTML = `
         <div class="modal-window">
           <div class="modal-content">
@@ -190,7 +190,7 @@ class Question {
       `<button class="button answer">${wrongAnswers[1]}</button>`,
       `<button class="button answer">${wrongAnswers[2]}</button>`,
     ];
-    return shuffle(array).join('');
+    return shuffleArray(array).join('');
   }
 
   async generateWrongVariants(correct) {
@@ -201,9 +201,9 @@ class Question {
     while (wrongVariants.length !== wrongVariantsCount) {
       let variant;
       if (this.typeOfQuiz === 'artists') {
-        variant = data[getRandomNum(0, dataLength)].authorEN;
+        variant = data[getRandomNumber(0, dataLength)].authorEN;
       } else {
-        variant = getRandomNum(0, dataLength);
+        variant = getRandomNumber(0, dataLength);
       }
       if (variant !== correct) {
         wrongVariants.push(variant);

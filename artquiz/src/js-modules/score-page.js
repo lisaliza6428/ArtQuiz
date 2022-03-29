@@ -1,11 +1,13 @@
 import question from './question-page';
 import { localStorageUtil } from './localStorage';
 import { GENRES, QUESTIONS_COUNT } from './consts';
+import { getRoundData } from './functions';
 
 class ScorePage {
   async render() {
+    const typeOfQuiz = localStorageUtil.getQuizType();
     const responce = await this.generateCardsBlock();
-    const quiz = `${'<'} ${question.typeOfQuiz.toUpperCase()[0] + question.typeOfQuiz.slice(1)} quiz`;
+    const quiz = `${'<'} ${typeOfQuiz.toUpperCase()[0] + typeOfQuiz.slice(1)} quiz`;
     const score = `${GENRES[question.categoryIndex]} ${responce.score}/${QUESTIONS_COUNT}`;
     document.querySelector('.container').innerHTML = `
     <div class="header">
@@ -26,7 +28,7 @@ class ScorePage {
   }
 
   async generateCardsBlock() {
-    const data = await question.getRoundData();
+    const data = await getRoundData(question.categoryIndex);
     const arr = localStorageUtil.getAnswersArray();
     let cardsBlock = '';
     let card = '';

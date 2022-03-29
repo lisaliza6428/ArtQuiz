@@ -143,7 +143,6 @@ class SettingsPage {
   }
 }
 const settingsPage = new SettingsPage();
-settingsPage.generateTimerSetter();
 export default settingsPage;
 
 function generateElement(el, cl, text) {

@@ -31,7 +31,7 @@ const router = async () => {
   const { component = ErrorPage } = findComponentByPath(path, routes) || {};
   question.currentQustionIndex = 0;
   question.correctAnswerCount = 0;
-  component.render();
+  await component.render();
 };
 
 window.addEventListener('hashchange', router);

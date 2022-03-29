@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-expressions */
 import { QUESTIONS_COUNT } from './consts';
 import { localStorageUtil } from './localStorage';
-import { shuffle, getRandomNum, getData } from './functions';
+import {
+  shuffle, getRandomNum, getData, getRoundData,
+} from './functions';
 import { sound } from './music';
 
 class Question {
@@ -51,14 +53,19 @@ class Question {
           </div>
           ${block}
       </div>`;
-    generateQuestion;
+    await generateQuestion;
   }
 
   async generateArtistsQuestion() {
-    const data = await this.getRoundData();
-    document.getElementById('question').innerText = 'Who is the author of this picture?';
-    document.querySelector('.question-picture-wrapper').innerHTML = `<img class="question-picture" src="/assets/img/${data[this.currentQustionIndex].imageNum}.webp" alt="picture">`;
-    document.querySelector('.question-answers').innerHTML = await this.getVariants(data[this.currentQustionIndex].authorEN);
+    const data = await getRoundData(this.categoryIndex);
+    const image = new Image();
+    image.src = `/assets/img/${data[this.currentQustionIndex].imageNum}.webp`;
+
+    image.onload = () => {
+      document.getElementById('question').innerText = 'Who is the author of this picture?';
+      document.querySelector('.question-picture-wrapper').innerHTML = `<img class="question-picture" src="/assets/img/${data[this.currentQustionIndex].imageNum}.webp" alt="picture">`;
+    };
+
     document.querySelector('.question-answers').addEventListener('click', (e) => {
       e.stopPropagation();
       if (e.target.classList.contains('correct')) {
@@ -76,10 +83,12 @@ class Question {
         document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('wrong');
       }
     }, { once: true });
+
+    document.querySelector('.question-answers').innerHTML = await this.getVariants(data[this.currentQustionIndex].authorEN);
   }
 
   async generatePicturesQuestion() {
-    const data = await this.getRoundData();
+    const data = await getRoundData(this.categoryIndex);
     document.getElementById('question').innerHTML = `<div>Which is <span class = "colored">${data[this.currentQustionIndex].authorEN}</span> picture?</div>`;
     const picturesContainer = document.querySelector('.pictures-container');
     const wrongAnswers = await
@@ -201,24 +210,6 @@ class Question {
       }
     }
     return wrongVariants;
-  }
-
-  async getRoundData() {
-    let round;
-    const data = await getData();
-    this.typeOfQuiz = localStorageUtil.getQuizType();
-    if (this.typeOfQuiz === 'artists') {
-      round = data.slice(
-        this.categoryIndex * QUESTIONS_COUNT,
-        this.categoryIndex * QUESTIONS_COUNT + QUESTIONS_COUNT,
-      );
-    } else {
-      round = data.slice(
-        this.categoryIndex * QUESTIONS_COUNT + 120,
-        this.categoryIndex * QUESTIONS_COUNT + QUESTIONS_COUNT + 120,
-      );
-    }
-    return round;
   }
 }
 const question = new Question();

@@ -45,6 +45,7 @@
   @media (max-width: 530px) {
     font-weight: 500;
     font-size: 30px;
+    margin: 40px 0 20px 0;
   }
 }
 
@@ -259,6 +260,11 @@
   margin: 50px 4px 4px auto;
   @media (max-width: 750px) {
     margin: 50px 4px 4px;
+  }
+  @media (max-width: 750px) {
+    margin: 15px  auto;
+    width: 240px;
+    height: 40px;
   }
 }
 

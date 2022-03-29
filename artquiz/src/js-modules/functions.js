@@ -1,4 +1,6 @@
-// import { localStorageUtil } from "./localStorage";
+import { localStorageUtil } from './localStorage';
+import { QUESTIONS_COUNT } from './consts';
+
 export async function getData() {
   const responce = await fetch('./assets/data.json');
   const data = await responce.json();
@@ -25,4 +27,22 @@ export function shuffle(arr) {
     array[i] = temp;
   }
   return arr;
+}
+
+export async function getRoundData(categoryIndex) {
+  let round;
+  const data = await getData();
+  const typeOfQuiz = localStorageUtil.getQuizType();
+  if (typeOfQuiz === 'artists') {
+    round = data.slice(
+      categoryIndex * QUESTIONS_COUNT,
+      categoryIndex * QUESTIONS_COUNT + QUESTIONS_COUNT,
+    );
+  } else {
+    round = data.slice(
+      categoryIndex * QUESTIONS_COUNT + 120,
+      categoryIndex * QUESTIONS_COUNT + QUESTIONS_COUNT + 120,
+    );
+  }
+  return round;
 }

@@ -13,9 +13,7 @@ export class LocalStorageUtil {
 
   getQuizType() {
     const quiz = localStorage.getItem(this.quizType);
-    if (quiz !== null) {
-      return quiz;
-    }
+    if (quiz !== null) return quiz;
     return '';
   }
 
@@ -25,9 +23,7 @@ export class LocalStorageUtil {
 
   getAnswersArray() {
     const arr = localStorage.getItem(this.answersArray);
-    if (arr !== null) {
-      return JSON.parse(arr);
-    }
+    if (arr !== null) return JSON.parse(arr);
     return new Array(240).fill('0');
   }
 
@@ -37,9 +33,7 @@ export class LocalStorageUtil {
 
   getSettings() {
     const info = localStorage.getItem(this.settings);
-    if (info !== null) {
-      return JSON.parse(info);
-    }
+    if (info !== null) return JSON.parse(info);
     return {
       sound: 20,
       timer: true,

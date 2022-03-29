@@ -7,14 +7,14 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 250px;
+  margin-top: 220px;
   @media (max-width: 600px) {
     margin-top: 150px;
   }
 
   .main-page__title {
     height: 165px;
-    margin: 0 auto 80px auto;
+    margin: 0 auto 70px auto;
     @media (max-width: 600px) {
       margin: 0 auto 50px auto;
       height: auto;
@@ -54,18 +54,29 @@
     }
   }
 }
-
-.settings {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  cursor: pointer;
+.settings-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  font-size: 20px;
   transition: 1s;
   &:hover {
+    .settings {
     transform: rotate(90deg);
     transition: 1s;
+    }
+    .set {
+    color: #ffbca2;
+    }
   }
+
 }
+.settings {
+  margin-right: 5px;
+  transition: 1s;
+}
+
 
 .footer {
   display: flex;

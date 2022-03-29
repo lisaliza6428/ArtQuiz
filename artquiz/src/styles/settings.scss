@@ -7,18 +7,22 @@
 .links-wrapper {
   display: flex;
   align-items: center;
-  cursor: pointer;
+  
 }
 
 .setting {
   font-style: normal;
   font-weight: 500;
-  font-size: 22px;
+  font-size: 28px;
   line-height: 28px;
   margin-left: 10px;
+  color: #ffbca2;
 }
+.back-arrow,
 .close {
   cursor: pointer;
+  width: 50px;
+  height: 50px;
 }
 
 .typeOuiz {

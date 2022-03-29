@@ -8,12 +8,16 @@ class StartPage {
     const image = new Image();
     image.src = '/assets/svg/title.svg';
     image.onload = () => {
-      document.querySelector('.container').innerHTML = `<a class="settings" href="#/settings"><img  src="/assets/svg/settings.svg" alt="Settings"></a>
+      document.querySelector('.container').innerHTML = `
       <div class="main-page-container">
       <div class="main-page">
           <img class="main-page__title" src="/assets/svg/title.svg" alt="Art Quiz">
           <a href="#/categories" class="main-page__button" id="artists-quiz">Artists quiz</a>
           <a href="#/categories" class="main-page__button" id="pictures-quiz">Pictures quiz</a>
+          <div class="settings-wrapper">
+          <a class="settings"href="#/settings"><img src="/assets/svg/settings.svg" alt="Settings"></a>
+          <a class="set" href="#/settings">Settings</a></div>
+          
       </div>
       </div>`;
       document.getElementById('artists-quiz').addEventListener('click', () => {

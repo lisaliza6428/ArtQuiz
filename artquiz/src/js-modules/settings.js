@@ -7,9 +7,9 @@ class SettingsPage {
   render() {
     document.querySelector('.container').innerHTML = `
       <div class="header-settings">
-          <div class="links-wrapper">
-              <a href="#"><img src="/assets/svg/arrow.svg" alt="back"></a>
-              <a href="#" class="setting">Settings</a>
+          <div  class="links-wrapper">
+              <a href="#"><img class="back-arrow" src="/assets/svg/arrow.svg" alt="back"></a>
+              <span class="setting">Settings</span>
           </div>
           <a href="#"><img class="close" src="/assets/svg/close.svg" alt="close"></a>
       </div>`;

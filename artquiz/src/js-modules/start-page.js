@@ -15,7 +15,7 @@ class StartPage {
           <a href="#/categories" class="main-page__button" id="artists-quiz">Artists quiz</a>
           <a href="#/categories" class="main-page__button" id="pictures-quiz">Pictures quiz</a>
           <div class="settings-wrapper">
-          <a class="settings"href="#/settings"><img src="/assets/svg/settings.svg" alt="Settings"></a>
+          <a class="settings__link"href="#/settings"><img src="/assets/svg/settings.svg" alt="Settings"></a>
           <a class="set" href="#/settings">Settings</a></div>
       </div>
       </div>`;

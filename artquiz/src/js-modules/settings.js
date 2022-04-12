@@ -6,12 +6,12 @@ import { generateHTMLElement } from './functions';
 class SettingsPage {
   render() {
     document.querySelector('.container').innerHTML = `
-      <div class="header-settings">
-          <div class="links-wrapper">
-              <a href="#"><img class="back-arrow" src="/assets/svg/arrow.svg" alt="back"></a>
-              <span class="setting">Settings</span>
+      <div class="settings">
+          <div class="settings__controls">
+              <a class="control__back" href="#"><img class="control__back-arrow" src="/assets/svg/arrow.svg" alt="back"></a>
+              <a class="control__back-link" href="#">Settings</a>
           </div>
-          <a href="#"><img class="close" src="/assets/svg/close.svg" alt="close"></a>
+          <a class="control__close" href="#"><img class="control__close-img" src="/assets/svg/close.svg" alt="close"></a>
       </div>`;
     this.generateSoundBar();
     this.generateTimerSetter();
@@ -39,7 +39,7 @@ class SettingsPage {
     };
 
     const div = generateHTMLElement('div', ['wrapper'], '');
-    div.innerHTML = '<p class="settings-item">Volume:</p>';
+    div.innerHTML = '<p class="settings__item">Volume:</p>';
     const wrapper = generateHTMLElement('div', ['sound-bar-bottom'], '');
     wrapper.innerHTML = `<img src="/assets/svg/sound_off.svg" alt="On">
                          <img src="/assets/svg/sound_on.svg" alt="Off">`;
@@ -49,7 +49,7 @@ class SettingsPage {
 
   generateTimerSetter() {
     const div = generateHTMLElement('div', ['wrapper'], '');
-    div.innerHTML = '<p class="settings-item">Time game:</p>';
+    div.innerHTML = '<p class="settings__item">Time game:</p>';
 
     const span = generateHTMLElement('span', ['on_off'], 'On');
     div.append(span);
@@ -100,7 +100,7 @@ class SettingsPage {
     } else {
       div = generateHTMLElement('div', ['wrapper-time-setter', 'inactive'], '');
     }
-    div.innerHTML = '<p class="settings-item">Time to answer:</p>';
+    div.innerHTML = '<p class="settings__item">Time to answer:</p>';
     const wrapper = generateHTMLElement('div', ['numborber'], '');
     const minusButton = generateHTMLElement('button', ['btnplus', 'numberbtn'], '-');
     const input = generateHTMLElement('input', ['number'], `${localStorageUtil.getSettings().timervalue}`);

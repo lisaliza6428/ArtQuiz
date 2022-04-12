@@ -12,7 +12,8 @@
 
 .modal-content {
   width: 500px;
-  height: 680px;
+  height: 690px;
+  padding: 10px 20px;
   background: #ffffff;
   position: absolute;
   top: calc(50% - 325px);
@@ -63,12 +64,12 @@
 .picture-name {
   font-style: normal;
   font-weight: 500;
-  font-size: 28px;
-  line-height: 39px;
-  margin-bottom: 10px;
+  font-size: 26px;
+  line-height: 28px;
   color: black;
+  margin-bottom: 5px;
   @media (max-width: 750px) {
-    font-size: 26px;
+    font-size: 24px;
   }
   @media (max-width: 450px) {
     font-size: 22px;
@@ -128,15 +129,16 @@
   justify-content: center;
   padding: 0;
   cursor: pointer;
-  width: 287px;
-  height: 62px;
-  border: 2px solid #ffffff;
-  background: none;
-  color: #ffffff;
-  border-radius: 60px;
+  height: 55px;
+  margin: 5px;
   font-weight: 500;
   font-size: 22px;
-  line-height: 22px;
+  line-height: 23px;
+  width: 180px;
+  border: 3px solid black;
+  background: none;
+  color: black;
+  border-radius: 25px;
   &:hover {
     color: black;
     background-color: #ffffff;
@@ -148,17 +150,18 @@
     transition: 0.75s ease-out;
     border: #ffbca2;
   }
-  width: 210px;
-  border: 3px solid black;
-  background: none;
-  color: black;
-  border-radius: 25px;
+
   &:hover {
     color: black;
     background-color: #ffbca2;
     border: 3px solid #ffbca2;
     transition: 0.75s ease-out;
   }
+  @media (max-width: 450px) {
+width: 100px;
+font-size: 18px;
+  }
+  
 }
 
 .cup {
@@ -173,12 +176,12 @@
   line-height: 51px;
   @media (max-width: 470px) {
     font-weight: 500;
-    font-size: 32px;
-    line-height: 40px;
+    font-size: 28px;
+    line-height: 32px;
   }
 }
 
-.results_ {
+.round-results {
   font-style: normal;
   font-weight: bold;
   font-size: 82px;
@@ -189,18 +192,5 @@
     font-weight: 500;
     font-size: 60px;
     line-height: 80px;
-  }
-}
-
-.leave_message {
-  font-style: normal;
-  font-weight: 600;
-  font-size: 42px;
-  line-height: 51px;
-  margin: 140px 0 70px 0;
-  @media (max-width: 530px) {
-    font-weight: 500;
-    font-size: 36px;
-    margin: 90px 0 70px 0;
   }
 }

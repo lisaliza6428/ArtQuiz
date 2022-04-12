@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import { QUESTIONS_COUNT } from './consts';
 import { localStorageUtil } from './localStorage';
 import {
@@ -15,17 +14,25 @@ class Question {
 
   typeOfQuiz;
 
+  time;
+
   timer = localStorageUtil.getSettings().timer;
+
+  round;
+
+  timeProgress;
+
+  timeContainer;
 
   async render() {
     let timer = '';
     if (this.timer) {
       timer = `
-      <div class="question-page__time-line">
-          <div class="time-line"></div>
-          <div id="line" class="time-line_red"></div>
+      <div class="timer">
+          <div class="timer__line"></div>
+          <div class="timer__line timer__line--colored" id="line" ></div>
       </div>
-      <div class="question-page__timer"><span id="time" class="time">00:10</span></div>`;
+      <span class="time" id="time"></span>`;
     }
     let container = '';
     let block = '';
@@ -54,10 +61,17 @@ class Question {
           ${block}
       </div>`;
     await generateQuestion;
+    document.querySelector('.question-page__close').addEventListener('click', () => {
+      if (this.timer) {
+        clearInterval(this.timeContainer);
+        clearInterval(this.timeProgress);
+      }
+    });
   }
 
   async generateArtistsQuestion() {
     const data = await getRoundData(this.categoryIndex);
+    this.round = data;
     const image = new Image();
     image.src = `/assets/img/${data[this.currentQustionIndex].imageNum}.webp`;
 
@@ -67,28 +81,24 @@ class Question {
     };
 
     document.querySelector('.question-answers').addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (e.target.classList.contains('correct')) {
-        sounds.correctAnswer();
-        this.updateAnswersArray('1', data);
-        this.correctAnswerCount += 1;
+      e.stopImmediatePropagation();
+      if (e.target.tagName === 'BUTTON' && e.target.classList.contains('correct')) {
+        this.correctAnswerActions();
         e.target.classList.add('correct-answer');
-        document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('correct');
-        this.showAnswer(data, 'correct');
-      } else {
-        sounds.wrongAnswer();
-        this.updateAnswersArray('0', data);
-        this.showAnswer(data, 'wrong');
-        e.target.classList.add('wrong-answer');
-        document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('wrong');
       }
-    }, { once: true });
 
+      if (e.target.tagName === 'BUTTON' && !e.target.classList.contains('correct')) {
+        this.wrongAnswerActions();
+        e.target.classList.add('wrong-answer');
+      }
+    });
     document.querySelector('.question-answers').innerHTML = await this.getVariants(data[this.currentQustionIndex].authorEN);
+    this.checkTimer();
   }
 
   async generatePicturesQuestion() {
     const data = await getRoundData(this.categoryIndex);
+    this.round = data;
     document.getElementById('question').innerHTML = `<div>Which is <span class = "colored">${data[this.currentQustionIndex].authorEN}</span> picture?</div>`;
     const picturesContainer = document.querySelector('.pictures-container');
     const wrongAnswers = await
@@ -114,21 +124,36 @@ class Question {
     picturesContainer.innerHTML = shuffleArray(arrayAnswers).join('');
 
     picturesContainer.addEventListener('click', (e) => {
-      if (e.target.closest('.correct')) {
-        sounds.correctAnswer();
-        this.updateAnswersArray('1', data);
-        this.correctAnswerCount += 1;
-        e.target.closest('.image-wrapper__bg').classList.add('correct-answer');
-        document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('correct');
-        this.showAnswer(data, 'correct');
-      } else {
-        sounds.wrongAnswer();
-        this.updateAnswersArray('0', data);
-        this.showAnswer(data, 'wrong');
-        e.target.closest('.image-wrapper__bg').classList.add('wrong-answer');
-        document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('wrong');
+      e.stopImmediatePropagation();
+      if (e.target.classList.contains('image-wrapper') && e.target.classList.contains('correct')) {
+        this.correctAnswerActions();
+        e.target.querySelector('.image-wrapper__bg').classList.add('correct-answer');
       }
-    }, { once: true });
+      if (e.target.classList.contains('image-wrapper') && !e.target.classList.contains('correct')) {
+        this.wrongAnswerActions();
+        e.target.querySelector('.image-wrapper__bg').classList.add('wrong-answer');
+      }
+    });
+    this.checkTimer();
+  }
+
+  correctAnswerActions() {
+    clearInterval(this.timeContainer);
+    clearInterval(this.timeProgress);
+    sounds.correctAnswer();
+    this.updateAnswersArray('1', this.round);
+    this.correctAnswerCount += 1;
+    this.showAnswer(this.round, 'correct');
+    document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('correct');
+  }
+
+  wrongAnswerActions() {
+    clearInterval(this.timeContainer);
+    clearInterval(this.timeProgress);
+    sounds.wrongAnswer();
+    this.updateAnswersArray('0', this.round);
+    this.showAnswer(this.round, 'wrong');
+    document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('wrong');
   }
 
   updateAnswersArray(answer, data) {
@@ -148,38 +173,42 @@ class Question {
       </div> 
       <div class="picture-name">${data[this.currentQustionIndex].nameEN}</div>
       <div class="picture-info">${data[this.currentQustionIndex].authorEN}, ${data[this.currentQustionIndex].year}</div>
-      <button id="next" class="button next">Next</button>
+      <button class="button next" id="next">Next</button>
     </div>`;
-    modalContainer.innerHTML = html;
-    const nextButton = document.getElementById('next');
-    nextButton.addEventListener('click', () => {
-      if (this.currentQustionIndex < 9) {
-        this.currentQustionIndex += 1;
-        modalContainer.innerHTML = '';
-        if (this.typeOfQuiz === 'artists') {
-          this.generateArtistsQuestion();
+    const image = new Image();
+    image.src = `/assets/img/${data[this.currentQustionIndex].imageNum}.webp`;
+    image.onload = () => {
+      modalContainer.innerHTML = html;
+      const nextButton = document.getElementById('next');
+      nextButton.addEventListener('click', () => {
+        if (this.currentQustionIndex < 9) {
+          this.currentQustionIndex += 1;
+          modalContainer.innerHTML = '';
+          if (this.typeOfQuiz === 'artists') {
+            this.generateArtistsQuestion();
+          } else {
+            this.generatePicturesQuestion();
+          }
         } else {
-          this.generatePicturesQuestion();
-        }
-      } else {
-        sounds.finishRound();
-        modalContainer.innerHTML = `
+          sounds.finishRound();
+          modalContainer.innerHTML = `
         <div class="modal-window">
           <div class="modal-content">
             <div class="modal_round_results">
             <img class="cup" src="/assets/svg/finish_round_cup.svg" width ="166" alt="">
             <div class="congratulations">Congratulations!</div>
-            <div class="results">${this.correctAnswerCount}/${QUESTIONS_COUNT}!</div>
+            <div class="round-results">${this.correctAnswerCount}/${QUESTIONS_COUNT}</div>
             <div class="results_buttons_wrapper">
                 <a href="#/" class="results_button">Home</a>
                 <a href="#/categories" class="results_button">Next Quiz</a>
             </div>
           </div>
         </div>`;
-        this.currentQustionIndex = 0;
-        this.correctAnswerCount = 0;
-      }
-    });
+          this.currentQustionIndex = 0;
+          this.correctAnswerCount = 0;
+        }
+      });
+    };
   }
 
   async getVariants(correct) {
@@ -211,7 +240,57 @@ class Question {
     }
     return wrongVariants;
   }
+
+  checkTimer() {
+    const t = localStorageUtil.getSettings().timer;
+    if (t === true) {
+      this.time = +localStorageUtil.getSettings().timervalue;
+      this.startTimer(this.time, this.currentQustionIndex);
+    }
+  }
+
+  timeIsOver() {
+    sounds.wrongAnswer();
+    this.updateAnswersArray('0', this.round);
+    this.showAnswer(this.round, 'wrong');
+    document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('wrong');
+  }
+
+  progressAnimation(time) {
+    const line = document.getElementById('line');
+    let width = 1;
+    function frame() {
+      if (width >= 100) {
+        clearInterval(this.timeProgress);
+      } else {
+        width += 1;
+        line.style.width = `${width}%`;
+      }
+    }
+    this.timeProgress = setInterval(frame, time * 10);
+  }
+
+  startTimer(t) {
+    let time = t;
+    const timeField = document.getElementById('time');
+    timeField.textContent = `00:${time}`;
+    this.progressAnimation(time);
+    const timer = () => {
+      time -= 1;
+      if (time <= 0) {
+        clearInterval(this.timeContainer);
+        timeField.textContent = '00:00';
+        this.timeIsOver();
+      } else if (time <= 9) {
+        timeField.textContent = `00:0${time}`;
+      } else {
+        timeField.textContent = `00:${time}`;
+      }
+    };
+    this.timeContainer = setInterval(timer, 1000);
+  }
 }
+
 const question = new Question();
 
 export default question;

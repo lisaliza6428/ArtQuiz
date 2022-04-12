@@ -61,8 +61,12 @@
   margin-top: 20px;
   font-size: 20px;
   transition: 1s;
+  .settings__link {
+    margin-right: 5px;
+    transition: 1s;
+  }
   &:hover {
-    .settings {
+    .settings__link {
     transform: rotate(90deg);
     transition: 1s;
     }
@@ -70,13 +74,7 @@
     color: #ffbca2;
     }
   }
-
 }
-.settings {
-  margin-right: 5px;
-  transition: 1s;
-}
-
 
 .footer {
   display: flex;

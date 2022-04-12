@@ -55,10 +55,8 @@ class Categories {
       wrapper.appendChild(div);
       div.addEventListener('click', (e) => {
         if (e.target.classList.contains('score')) {
-          // console.log('score', div.id);
           question.categoryIndex = +div.id;
         } else {
-          // console.log('game', div.id);
           question.categoryIndex = +div.id;
         }
       });
@@ -67,5 +65,6 @@ class Categories {
     }
   }
 }
+
 const categories = new Categories();
 export default categories;

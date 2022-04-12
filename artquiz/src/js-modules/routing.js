@@ -7,10 +7,10 @@ import scorePage from './score-page';
 const ErrorPage = {
   render: () => {
     document.querySelector('.container').innerHTML = `
-    <section>
+    <div>
       <h1>Something went wrong!</h1>
       <a href="#/" class="main-page__button" id="artists-quiz">Go back to the start page</a>
-    </section>
+    </div>
   `;
   },
 };

@@ -1,7 +1,7 @@
 .modal {
   z-index: 5;
 }
-.modal-window {
+.popup {
   width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
@@ -10,7 +10,7 @@
   left: 0;
 }
 
-.modal-content {
+.popup-wrapper {
   width: 500px;
   height: 690px;
   padding: 10px 20px;
@@ -36,19 +36,19 @@
   }
 }
 
-.modal-image__picture {
+.popup-image__picture {
   width: 90%;
   border-radius: 20px;
 }
 
-.modal-image {
+.popup-image {
   position: relative;
   margin: 20px 0;
   display: flex;
   justify-content: center;
 }
 
-.modal-image__icon {
+.popup-image__icon {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -93,12 +93,16 @@
   background: #ffbca2;
   color: black;
   margin: 5px auto 5px auto;
+  &:hover{
+    background: #ffbca2;
+    color: #ffffff;
+  }
   @media (max-width: 450px) {
     width: 200px;
   }
 }
 
-.modal_round_results {
+.finish {
   color: black;
   display: flex;
   flex-direction: column;
@@ -116,14 +120,14 @@
   }
 }
 
-.results_buttons_wrapper {
+.finish__wrapper {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   width: 100%;
 }
 
-.results_button {
+.finish__button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -164,12 +168,12 @@ font-size: 18px;
   
 }
 
-.cup {
+.finish__image {
   margin-left: auto;
   margin-right: auto;
 }
 
-.congratulations {
+.finish__text  {
   font-style: normal;
   font-weight: 600;
   font-size: 42px;
@@ -181,7 +185,7 @@ font-size: 18px;
   }
 }
 
-.round-results {
+.finish__score {
   font-style: normal;
   font-weight: bold;
   font-size: 82px;

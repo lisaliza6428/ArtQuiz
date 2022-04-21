@@ -10,8 +10,8 @@ class Categories {
     document.querySelector('.container').innerHTML = `
         <div class="header">
           <img class="header__logo" src="assets/svg/logo.svg" alt="Logo">
-          <a href="#/" class="header__home-link">Home</a>
-          <span href="#"class="header__categories">Categories</span>
+          <a class="header__home-link" href="#">Home</a>
+          <span class="header__current-page" href="#">Categories</span>
         </div>
         <h3 class="quiz-title">${type[0].toUpperCase() + type.slice(1)} quiz:</h3>
         <div class="categories-container"></div>`;
@@ -33,7 +33,7 @@ class Categories {
     let cardIndex = 0;
     const images = [];
     const wrapper = document.createElement('div');
-    wrapper.className = 'categories-container';
+    wrapper.className = 'cards';
     for (start; start < end; start += QUESTIONS_COUNT) {
       const results = arr.slice(start, start + QUESTIONS_COUNT).filter((x) => x === '1').length;
       let none = '';
@@ -41,17 +41,21 @@ class Categories {
         none = 'none';
       }
       const div = document.createElement('div');
-      div.classList.add('category-card');
+      div.classList.add('card');
       div.id = cardIndex;
       div.innerHTML = `
-        <div class="description">
-          <div class="category">${GENRES[cardIndex]}</div>
-          <a href="#/score" class="score ${none}">${results}/${QUESTIONS_COUNT}</a>
+        <div class="card__top">
+          <div class="card__category">${GENRES[cardIndex]}</div>
+          <a class="card__score ${none}" href="#/score">${results}/${QUESTIONS_COUNT}</a>
         </div>
-        <a href="#/question" class="box-wrapper">
-            <img class="img-category grey" src="/assets/img/${start}.webp" alt="Picture">
-            <div class="results again ${none}"><img class="again-img" src="/assets/svg/again.svg">Play again</div>
+        <a class="card__box" href="#/question">
+            <img class="card__image card__image--grey" src="/assets/img/${start}.webp" alt="Picture">
+            <div class="card__label ${none}">
+              <img class="card__label-image" src="/assets/svg/again.svg">
+              Play again
+            </div>
         </a>`;
+
       images.push(`/assets/img/${start}.webp`);
       wrapper.appendChild(div);
       div.addEventListener('click', (e) => {
@@ -62,8 +66,8 @@ class Categories {
         }
       });
       cardIndex += 1;
-      document.querySelector('.categories-container').append(wrapper);
     }
+    document.querySelector('.categories-container').append(wrapper);
   }
 }
 

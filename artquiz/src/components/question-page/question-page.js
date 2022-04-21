@@ -51,10 +51,12 @@ class Question {
     document.querySelector('.container').innerHTML = `
       <div class="question-page">
           <div class="question-page__top">
-            <a href="#/categories"><img class="question-page__close" src="/assets/svg/close.svg" alt=""></a>
+            <a class="question-page__close" href="#/categories">
+              <img src="/assets/svg/close.svg" alt="">
+            </a>
             ${timer}
           </div>
-          <p id="question" class="question"></p>
+          <p class="question" id="question"></p>
           <div class="${container}"></div>
           <div class="question-dots">
             ${'<span class="question-dots__dot"></span>'.repeat(QUESTIONS_COUNT)}
@@ -166,16 +168,17 @@ class Question {
   showAnswer(data, param) {
     const modalContainer = document.querySelector('.modal');
     const html = `
-    <div class="modal-window">
-      <div class="modal-content">
-      <div class="modal-image">
-          <img class="modal-image__picture" src="/assets/img/${data[this.currentQustionIndex].imageNum}.webp" alt="">
-          <img class="modal-image__icon" src="/assets/svg/${param}-answer.svg" alt="">
+    <div class="popup">
+      <div class="popup-wrapper">
+      <div class="popup-image">
+          <img class="popup-image__picture" src="/assets/img/${data[this.currentQustionIndex].imageNum}.webp" alt="">
+          <img class="popup-image__icon" src="/assets/svg/${param}-answer.svg" alt="">
       </div> 
       <div class="picture-name">${data[this.currentQustionIndex].nameEN}</div>
       <div class="picture-info">${data[this.currentQustionIndex].authorEN}, ${data[this.currentQustionIndex].year}</div>
       <button class="button next" id="next">Next</button>
     </div>`;
+
     const image = new Image();
     image.src = `/assets/img/${data[this.currentQustionIndex].imageNum}.webp`;
     image.onload = () => {
@@ -196,15 +199,15 @@ class Question {
           img.src = '/assets/svg/finish_round_cup.svg';
           img.onload = () => {
             modalContainer.innerHTML = `
-            <div class="modal-window">
-              <div class="modal-content">
-                <div class="modal_round_results">
-                <img class="cup" src="/assets/svg/finish_round_cup.svg" width ="166" alt="">
-                <div class="congratulations">Congratulations!</div>
-                <div class="round-results">${this.correctAnswerCount}/${QUESTIONS_COUNT}</div>
-                <div class="results_buttons_wrapper">
-                  <a class="results_button" href="#/" >Home</a>
-                  <a class="results_button" href="#/categories">Next Quiz</a>
+            <div class="popup">
+              <div class="popup-wrapper">
+                <div class="finish">
+                <img class="finish__image" src="/assets/svg/finish_round_cup.svg" width ="166" alt="">
+                <div class="finish__text">Congratulations!</div>
+                <div class="finish__score">${this.correctAnswerCount}/${QUESTIONS_COUNT}</div>
+                <div class="finish__wrapper">
+                  <a class="finish__button" href="#/" >Home</a>
+                  <a class="finish__button" href="#/categories">Next Quiz</a>
                 </div>
               </div>
             </div>`;

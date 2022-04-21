@@ -13,11 +13,14 @@ class StartPage {
       <div class="main-page-container">
       <div class="main-page">
           <img class="main-page__title" src="/assets/svg/title.svg" alt="Art Quiz">
-          <a href="#/categories" class="main-page__button" id="artists-quiz">Artists quiz</a>
-          <a href="#/categories" class="main-page__button" id="pictures-quiz">Pictures quiz</a>
+          <a class="main-page__button" href="#/categories" id="artists-quiz">Artists quiz</a>
+          <a class="main-page__button" href="#/categories" id="pictures-quiz">Pictures quiz</a>
           <div class="settings-wrapper">
-          <a class="settings__link"href="#/settings"><img src="/assets/svg/settings.svg" alt="Settings"></a>
-          <a class="set" href="#/settings">Settings</a></div>
+            <a class="settings__link"href="#/settings">
+              <img src="/assets/svg/settings.svg" alt="Settings">
+            </a>
+            <a class="set" href="#/settings">Settings</a>
+          </div>
       </div>
       </div>`;
       document.getElementById('artists-quiz').addEventListener('click', () => {
@@ -36,10 +39,10 @@ class StartPage {
     footer.classList.add('footer');
     footer.innerHTML = `
       <a class="footer__RSS-link" href="https://rs.school/js/" target="_blank">
-      <img src="/assets/svg/rs_school.svg" alt="RSSchool">
+      <img class="footer__RSS-img" src="/assets/svg/rs_school.svg" alt="RSSchool">
       </a>
       <div class="footer__developer-link">App developer:
-        <a class="developer" target="_blank" href="https://github.com/lisaliza6428">Elizaveta Ivanushenko</a> (2022)
+        <a class="footer__dev-link developer" target="_blank" href="https://github.com/lisaliza6428">Elizaveta Ivanushenko</a> (2022)
       </div>`;
     document.body.append(this.main, footer);
   };

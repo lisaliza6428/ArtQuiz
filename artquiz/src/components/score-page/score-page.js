@@ -13,10 +13,11 @@ class ScorePage {
     document.querySelector('.container').innerHTML = `
       <div class="header">
         <img class="header__logo" src="assets/svg/logo.svg" alt="Logo">
-        <a href="#/categories" class="header__home-link">${quiz}</a>
-        <span href="#"class="header__categories">Score</span>
+        <a class="header__home-link" href="#/categories">${quiz}</a>
+        <span class="header__current-page" href="#">Score</span>
       </div>
       <h3 class="score-title">${score}</h3>
+      <div class="score-note">Click the picture to see detailes</div>
       <div class="results-container">
         ${responce.cardsBlock}
       </div>`;

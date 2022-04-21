@@ -131,10 +131,12 @@ class SettingsPage {
     button.innerText = 'Default';
     button.addEventListener('click', () => {
       localStorageUtil.setSettings({ sound: 20, timer: true, timervalue: 20 });
+      question.timer = true;
       this.render();
     });
     document.querySelector('.container').appendChild(button);
   }
 }
+
 const settingsPage = new SettingsPage();
 export default settingsPage;

@@ -1,7 +1,8 @@
-import question from './question-page';
-import { localStorageUtil } from './localStorage';
-import { GENRES, QUESTIONS_COUNT } from './consts';
-import { getRoundData } from './functions';
+import './score-page.scss';
+import question from '../question-page/question-page';
+import { localStorageUtil } from '../localStorage';
+import { GENRES, QUESTIONS_COUNT } from '../consts';
+import { getRoundData } from '../functions';
 
 class ScorePage {
   async render() {

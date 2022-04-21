@@ -1,15 +1,15 @@
-import startPage from './start-page';
-import categories from './categories-page';
-import question from './question-page';
-import settingsPage from './settings';
-import scorePage from './score-page';
+import startPage from './start-page/start-page';
+import categories from './categories-page/categories-page';
+import question from './question-page/question-page';
+import settingsPage from './settings-page/settings';
+import scorePage from './score-page/score-page';
 
 const ErrorPage = {
   render: () => {
     document.querySelector('.container').innerHTML = `
     <div>
       <h1>Something went wrong!</h1>
-      <a href="#/" class="main-page__button" id="artists-quiz">Go back to the start page</a>
+      <a href="#/" class="main-page__button">Go back to the start page</a>
     </div>
   `;
   },

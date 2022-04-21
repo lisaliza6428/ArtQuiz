@@ -1,10 +1,6 @@
 @import './reset.scss';
-@import './start-page.scss';
-@import './categories.scss';
-@import './question-page.scss';
-@import './modal-windows.scss';
-@import './score-page.scss';
-@import './settings.scss';
+@import '../pop-ups/pop-ups.scss';
+
 
 body {
   background-color: black;

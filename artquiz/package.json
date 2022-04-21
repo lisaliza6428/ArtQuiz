@@ -5,7 +5,8 @@
   "name": "artquiz",
   "scripts": {
     "start": "rss-scripts start",
-    "build": "rss-scripts build"
+    "build": "rss-scripts build",
+    "lint": "eslint . --ext .js"
   },
   "devDependencies": {
     "eslint": "^8.6.0",

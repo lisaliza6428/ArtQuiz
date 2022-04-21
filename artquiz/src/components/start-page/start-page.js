@@ -1,4 +1,5 @@
-import { localStorageUtil } from './localStorage';
+import './start-page.scss';
+import { localStorageUtil } from '../localStorage';
 
 class StartPage {
   main = document.createElement('main');

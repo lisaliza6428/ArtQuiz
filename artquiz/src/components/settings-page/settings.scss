@@ -1,6 +1,7 @@
 .settings {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 40px 0 0 0;
 }
 
@@ -39,7 +40,7 @@
   font-weight: bold;
   font-size: 34px;
   line-height: 28px;
-  margin: 60px 0 40px 0;
+  margin: 60px 0 30px 0;
 
   &.inactive {
     color: gray;
@@ -47,7 +48,7 @@
   @media (max-width: 530px) {
     font-weight: 500;
     font-size: 30px;
-    margin: 40px 0 20px 0;
+    margin: 60px 0 20px 0;
   }
 }
 

@@ -1,9 +1,10 @@
-import { QUESTIONS_COUNT } from './consts';
-import { localStorageUtil } from './localStorage';
+import './question-page.scss';
+import { QUESTIONS_COUNT } from '../consts';
+import { localStorageUtil } from '../localStorage';
 import {
   shuffleArray, getRandomNumber, getData, getRoundData,
-} from './functions';
-import { sounds } from './sounds';
+} from '../functions';
+import { sounds } from '../sounds';
 
 class Question {
   categoryIndex = 0;
@@ -191,21 +192,25 @@ class Question {
           }
         } else {
           sounds.finishRound();
-          modalContainer.innerHTML = `
-        <div class="modal-window">
-          <div class="modal-content">
-            <div class="modal_round_results">
-            <img class="cup" src="/assets/svg/finish_round_cup.svg" width ="166" alt="">
-            <div class="congratulations">Congratulations!</div>
-            <div class="round-results">${this.correctAnswerCount}/${QUESTIONS_COUNT}</div>
-            <div class="results_buttons_wrapper">
-                <a href="#/" class="results_button">Home</a>
-                <a href="#/categories" class="results_button">Next Quiz</a>
-            </div>
-          </div>
-        </div>`;
-          this.currentQustionIndex = 0;
-          this.correctAnswerCount = 0;
+          const img = new Image();
+          img.src = '/assets/svg/finish_round_cup.svg';
+          img.onload = () => {
+            modalContainer.innerHTML = `
+            <div class="modal-window">
+              <div class="modal-content">
+                <div class="modal_round_results">
+                <img class="cup" src="/assets/svg/finish_round_cup.svg" width ="166" alt="">
+                <div class="congratulations">Congratulations!</div>
+                <div class="round-results">${this.correctAnswerCount}/${QUESTIONS_COUNT}</div>
+                <div class="results_buttons_wrapper">
+                  <a class="results_button" href="#/" >Home</a>
+                  <a class="results_button" href="#/categories">Next Quiz</a>
+                </div>
+              </div>
+            </div>`;
+            this.currentQustionIndex = 0;
+            this.correctAnswerCount = 0;
+          };
         }
       });
     };

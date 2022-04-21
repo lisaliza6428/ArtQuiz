@@ -1,6 +1,7 @@
-import { localStorageUtil } from './localStorage';
-import question from './question-page';
-import { GENRES, QUESTIONS_COUNT } from './consts';
+import './categories.scss';
+import { localStorageUtil } from '../localStorage';
+import question from '../question-page/question-page';
+import { GENRES, QUESTIONS_COUNT } from '../consts';
 
 class Categories {
   async render() {

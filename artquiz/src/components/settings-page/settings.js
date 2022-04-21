@@ -1,7 +1,8 @@
-import { sounds } from './sounds';
-import question from './question-page';
-import { localStorageUtil } from './localStorage';
-import { generateHTMLElement } from './functions';
+import './settings.scss';
+import { sounds } from '../sounds';
+import question from '../question-page/question-page';
+import { localStorageUtil } from '../localStorage';
+import { generateHTMLElement } from '../functions';
 
 class SettingsPage {
   render() {

@@ -15,207 +15,218 @@ class Question {
 
   typeOfQuiz;
 
-  time;
+  timer;
 
-  timer = localStorageUtil.getSettings().timer;
+  roundData;
 
-  round;
+  currentTimer;
 
-  timeProgress;
-
-  timeContainer;
+  currentTimerAnimation;
 
   async render() {
-    let timer = '';
+    this.typeOfQuiz = localStorageUtil.getQuizType();
+    this.timer = localStorageUtil.getSettings().timer;
+    this.roundData = await getRoundData(this.categoryIndex);
+
+    document.querySelector('.container').innerHTML = `
+      <div class="question-page">
+          <div class="question-page__top">
+            <a class="question-page__close" href="#/categories">
+              <img class="question-page__close-img" src="/assets/svg/close.svg" alt="">
+            </a>
+            ${this.insertTimerHTML()}
+          </div>
+          <p class="question" id="question"></p>
+          <div class="picture-container"></div>
+          <div class="question-dots">
+            ${'<span class="question-dots__dot"></span>'.repeat(QUESTIONS_COUNT)}
+          </div>
+          <div class="question-answers"></div>
+      </div>`;
+
+    document.querySelector('.question-page__close').addEventListener('click', () => {
+      if (this.timer) {
+        clearInterval(this.currentTimer);
+        clearInterval(this.currentTimerAnimation);
+      }
+    });
+
+    if (this.typeOfQuiz === 'artists') {
+      await this.generateArtistsQuestion();
+    } else {
+      await this.generatePicturesQuestion();
+    }
+  }
+
+  insertTimerHTML() {
     if (this.timer) {
-      timer = `
+      return `
       <div class="timer">
           <div class="timer__line"></div>
           <div class="timer__line timer__line--colored" id="line" ></div>
       </div>
       <span class="time" id="time"></span>`;
     }
-    let container = '';
-    let block = '';
-    let generateQuestion;
-    this.typeOfQuiz = localStorageUtil.getQuizType();
-    if (this.typeOfQuiz === 'artists') {
-      container = 'question-picture-wrapper';
-      block = '<div class="question-answers"></div>';
-      generateQuestion = this.generateArtistsQuestion();
-    } else {
-      container = 'pictures-container';
-      generateQuestion = this.generatePicturesQuestion();
-    }
-
-    document.querySelector('.container').innerHTML = `
-      <div class="question-page">
-          <div class="question-page__top">
-            <a class="question-page__close" href="#/categories">
-              <img src="/assets/svg/close.svg" alt="">
-            </a>
-            ${timer}
-          </div>
-          <p class="question" id="question"></p>
-          <div class="${container}"></div>
-          <div class="question-dots">
-            ${'<span class="question-dots__dot"></span>'.repeat(QUESTIONS_COUNT)}
-          </div>
-          ${block}
-      </div>`;
-    await generateQuestion;
-    document.querySelector('.question-page__close').addEventListener('click', () => {
-      if (this.timer) {
-        clearInterval(this.timeContainer);
-        clearInterval(this.timeProgress);
-      }
-    });
+    return '';
   }
 
   async generateArtistsQuestion() {
-    const data = await getRoundData(this.categoryIndex);
-    this.round = data;
     const image = new Image();
-    image.src = `/assets/img/${data[this.currentQustionIndex].imageNum}.webp`;
-
-    image.onload = () => {
+    image.src = `/assets/img/${this.roundData[this.currentQustionIndex].imageNum}.webp`;
+    image.onload = async () => {
       document.getElementById('question').innerText = 'Who is the author of this picture?';
-      document.querySelector('.question-picture-wrapper').innerHTML = `<img class="question-picture" src="/assets/img/${data[this.currentQustionIndex].imageNum}.webp" alt="picture">`;
+      document.querySelector('.picture-container').classList.add('question-picture-wrapper');
+      document.querySelector('.question-picture-wrapper').innerHTML = `<img class="question-picture" src="/assets/img/${this.roundData[this.currentQustionIndex].imageNum}.webp" alt="picture">`;
+
+      document.querySelector('.question-answers').addEventListener('click', (e) => {
+        e.stopImmediatePropagation();
+        if (e.target.tagName === 'BUTTON' && e.target.classList.contains('correct')) {
+          this.correctAnswerActions();
+          e.target.classList.add('correct-answer');
+        }
+        if (e.target.tagName === 'BUTTON' && !e.target.classList.contains('correct')) {
+          this.wrongAnswerActions();
+          e.target.classList.add('wrong-answer');
+        }
+      });
+      document.querySelector('.question-answers').innerHTML = await this.getVariants(this.roundData[this.currentQustionIndex].authorEN);
     };
 
-    document.querySelector('.question-answers').addEventListener('click', (e) => {
-      e.stopImmediatePropagation();
-      if (e.target.tagName === 'BUTTON' && e.target.classList.contains('correct')) {
-        this.correctAnswerActions();
-        e.target.classList.add('correct-answer');
-      }
-
-      if (e.target.tagName === 'BUTTON' && !e.target.classList.contains('correct')) {
-        this.wrongAnswerActions();
-        e.target.classList.add('wrong-answer');
-      }
-    });
-    document.querySelector('.question-answers').innerHTML = await this.getVariants(data[this.currentQustionIndex].authorEN);
     this.checkTimer();
   }
 
   async generatePicturesQuestion() {
-    const data = await getRoundData(this.categoryIndex);
-    this.round = data;
-    document.getElementById('question').innerHTML = `<div>Which is <span class = "colored">${data[this.currentQustionIndex].authorEN}</span> picture?</div>`;
+    document.getElementById('question').innerHTML = `<div>Which is <span class = "colored">${this.roundData[this.currentQustionIndex].authorEN}</span> picture?</div>`;
+    document.querySelector('.picture-container').classList.add('pictures-container');
     const picturesContainer = document.querySelector('.pictures-container');
     const wrongAnswers = await
-    this.generateWrongVariants(data[this.currentQustionIndex].imageNum);
-    const arrayAnswers = [
-      `<div class="image-wrapper correct">
-        <img class="image-wrapper__picture" src="/assets/img/${data[this.currentQustionIndex].imageNum}.webp" alt="">
-        <div class="image-wrapper__bg"></div>
-      </div>`,
-      `<div class="image-wrapper">
-        <img class="image-wrapper__picture" src="/assets/img/${wrongAnswers[0]}.webp" alt="">
-        <div class="image-wrapper__bg"></div>
-      </div>`,
-      `<div class="image-wrapper">
-        <img class="image-wrapper__picture" src="/assets/img/${wrongAnswers[1]}.webp" alt="">
-        <div class="image-wrapper__bg"></div>
-      </div>`,
-      `<div class="image-wrapper">
-          <img class="image-wrapper__picture" src="/assets/img/${wrongAnswers[2]}.webp" alt="">
-          <div class="image-wrapper__bg"></div>
-      </div>`,
+    this.generateWrongVariants(this.roundData[this.currentQustionIndex].imageNum);
+    const arraySRC = [
+      `/assets/img/${this.roundData[this.currentQustionIndex].imageNum}.webp`,
+      `/assets/img/${wrongAnswers[0]}.webp`,
+      `/assets/img/${wrongAnswers[1]}.webp`,
+      `/assets/img/${wrongAnswers[2]}.webp`,
     ];
-    picturesContainer.innerHTML = shuffleArray(arrayAnswers).join('');
+    const arrayAnswers = [];
+    arraySRC.forEach((src) => {
+      let correctClass = '';
+      if (src === `/assets/img/${this.roundData[this.currentQustionIndex].imageNum}.webp`) {
+        correctClass = 'correct';
+      }
+      arrayAnswers.push(`
+    <div class="image-wrapper ${correctClass}">
+      <img class="image-wrapper__picture" src="${src}" alt="picture">
+      <div class="image-wrapper__bg"></div>
+    </div>`);
+    });
 
-    picturesContainer.addEventListener('click', (e) => {
-      e.stopImmediatePropagation();
-      if (e.target.classList.contains('image-wrapper') && e.target.classList.contains('correct')) {
-        this.correctAnswerActions();
-        e.target.querySelector('.image-wrapper__bg').classList.add('correct-answer');
+    let counter = arraySRC.length;
+
+    const checkLoaded = async () => {
+      counter -= 1;
+      if (counter === 0) {
+        picturesContainer.innerHTML = shuffleArray(arrayAnswers).join('');
+
+        picturesContainer.addEventListener('click', (e) => {
+          e.stopImmediatePropagation();
+          if (e.target.classList.contains('image-wrapper') && e.target.classList.contains('correct')) {
+            this.correctAnswerActions();
+            e.target.querySelector('.image-wrapper__bg').classList.add('correct-answer');
+          }
+          if (e.target.classList.contains('image-wrapper') && !e.target.classList.contains('correct')) {
+            this.wrongAnswerActions();
+            e.target.querySelector('.image-wrapper__bg').classList.add('wrong-answer');
+          }
+        });
       }
-      if (e.target.classList.contains('image-wrapper') && !e.target.classList.contains('correct')) {
-        this.wrongAnswerActions();
-        e.target.querySelector('.image-wrapper__bg').classList.add('wrong-answer');
-      }
+    };
+
+    arraySRC.forEach((src) => {
+      const image = new Image();
+      image.src = src;
+      image.onload = checkLoaded;
     });
     this.checkTimer();
   }
 
   correctAnswerActions() {
-    clearInterval(this.timeContainer);
-    clearInterval(this.timeProgress);
+    clearInterval(this.currentTimer);
+    clearInterval(this.currentTimerAnimation);
     sounds.correctAnswer();
-    this.updateAnswersArray('1', this.round);
+    this.updateAnswersArray('1');
     this.correctAnswerCount += 1;
-    this.showAnswer(this.round, 'correct');
+    this.showAnswer('correct');
     document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('correct');
   }
 
   wrongAnswerActions() {
-    clearInterval(this.timeContainer);
-    clearInterval(this.timeProgress);
+    clearInterval(this.currentTimer);
+    clearInterval(this.currentTimerAnimation);
     sounds.wrongAnswer();
-    this.updateAnswersArray('0', this.round);
-    this.showAnswer(this.round, 'wrong');
+    this.updateAnswersArray('0');
+    this.showAnswer('wrong');
     document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('wrong');
   }
 
-  updateAnswersArray(answer, data) {
+  updateAnswersArray(answer) {
     const arr = localStorageUtil.getAnswersArray();
-    arr[data[this.currentQustionIndex].imageNum] = `${answer}`;
+    arr[this.roundData[this.currentQustionIndex].imageNum] = `${answer}`;
     localStorageUtil.setAnswersArray(arr);
   }
 
-  showAnswer(data, param) {
-    const modalContainer = document.querySelector('.modal');
+  showAnswer(answer) {
     const html = `
     <div class="popup">
       <div class="popup-wrapper">
       <div class="popup-image">
-          <img class="popup-image__picture" src="/assets/img/${data[this.currentQustionIndex].imageNum}.webp" alt="">
-          <img class="popup-image__icon" src="/assets/svg/${param}-answer.svg" alt="">
+          <img class="popup-image__picture" src="/assets/img/${this.roundData[this.currentQustionIndex].imageNum}.webp" alt="">
+          <img class="popup-image__icon" src="/assets/svg/${answer}-answer.svg" alt="">
       </div> 
-      <div class="picture-name">${data[this.currentQustionIndex].nameEN}</div>
-      <div class="picture-info">${data[this.currentQustionIndex].authorEN}, ${data[this.currentQustionIndex].year}</div>
-      <button class="button next" id="next">Next</button>
+      <div class="picture-name">${this.roundData[this.currentQustionIndex].nameEN}</div>
+      <div class="picture-info">${this.roundData[this.currentQustionIndex].authorEN}, ${this.roundData[this.currentQustionIndex].year}</div>
+      <button class="button next" id="next-button">Next</button>
     </div>`;
 
     const image = new Image();
-    image.src = `/assets/img/${data[this.currentQustionIndex].imageNum}.webp`;
+    image.src = `/assets/img/${this.roundData[this.currentQustionIndex].imageNum}.webp`;
     image.onload = () => {
-      modalContainer.innerHTML = html;
-      const nextButton = document.getElementById('next');
-      nextButton.addEventListener('click', () => {
-        if (this.currentQustionIndex < 9) {
+      document.querySelector('.modal').innerHTML = html;
+      document.getElementById('next-button').addEventListener('click', () => {
+        if (this.currentQustionIndex < (QUESTIONS_COUNT - 1)) {
           this.currentQustionIndex += 1;
-          modalContainer.innerHTML = '';
+          document.querySelector('.modal').innerHTML = '';
           if (this.typeOfQuiz === 'artists') {
             this.generateArtistsQuestion();
           } else {
             this.generatePicturesQuestion();
           }
         } else {
-          sounds.finishRound();
-          const img = new Image();
-          img.src = '/assets/svg/finish_round_cup.svg';
-          img.onload = () => {
-            modalContainer.innerHTML = `
-            <div class="popup">
-              <div class="popup-wrapper">
-                <div class="finish">
-                <img class="finish__image" src="/assets/svg/finish_round_cup.svg" width ="166" alt="">
-                <div class="finish__text">Congratulations!</div>
-                <div class="finish__score">${this.correctAnswerCount}/${QUESTIONS_COUNT}</div>
-                <div class="finish__wrapper">
-                  <a class="finish__button" href="#/" >Home</a>
-                  <a class="finish__button" href="#/categories">Next Quiz</a>
-                </div>
-              </div>
-            </div>`;
-            this.currentQustionIndex = 0;
-            this.correctAnswerCount = 0;
-          };
+          this.finishRound();
         }
       });
+    };
+  }
+
+  finishRound() {
+    sounds.finishRound();
+    const img = new Image();
+    img.src = '/assets/svg/finish_round_cup.svg';
+    img.onload = () => {
+      document.querySelector('.modal').innerHTML = `
+      <div class="popup">
+        <div class="popup-wrapper">
+          <div class="finish">
+          <img class="finish__image" src="/assets/svg/finish_round_cup.svg" width ="166" alt="">
+          <div class="finish__text">Congratulations!</div>
+          <div class="finish__score">${this.correctAnswerCount}/${QUESTIONS_COUNT}</div>
+          <div class="finish__wrapper">
+            <a class="finish__button" href="#/" >Home</a>
+            <a class="finish__button" href="#/categories">Next Quiz</a>
+          </div>
+        </div>
+      </div>`;
+      this.currentQustionIndex = 0;
+      this.correctAnswerCount = 0;
     };
   }
 
@@ -250,17 +261,17 @@ class Question {
   }
 
   checkTimer() {
-    const t = localStorageUtil.getSettings().timer;
-    if (t === true) {
-      this.time = +localStorageUtil.getSettings().timervalue;
-      this.startTimer(this.time, this.currentQustionIndex);
+    const isTimer = localStorageUtil.getSettings().timer;
+    if (isTimer) {
+      const time = +localStorageUtil.getSettings().timervalue;
+      this.startTimer(time, this.currentQustionIndex);
     }
   }
 
   timeIsOver() {
     sounds.wrongAnswer();
-    this.updateAnswersArray('0', this.round);
-    this.showAnswer(this.round, 'wrong');
+    this.updateAnswersArray('0');
+    this.showAnswer(this.roundData, 'wrong');
     document.querySelectorAll('.question-dots__dot')[this.currentQustionIndex].classList.add('wrong');
   }
 
@@ -269,13 +280,13 @@ class Question {
     let width = 1;
     function frame() {
       if (width >= 100) {
-        clearInterval(this.timeProgress);
+        clearInterval(this.currentTimerAnimation);
       } else {
         width += 1;
         line.style.width = `${width}%`;
       }
     }
-    this.timeProgress = setInterval(frame, time * 10);
+    this.currentTimerAnimation = setInterval(frame, time * 10);
   }
 
   startTimer(t) {
@@ -286,7 +297,7 @@ class Question {
     const timer = () => {
       time -= 1;
       if (time <= 0) {
-        clearInterval(this.timeContainer);
+        clearInterval(this.currentTimer);
         timeField.textContent = '00:00';
         this.timeIsOver();
       } else if (time <= 9) {
@@ -295,7 +306,7 @@ class Question {
         timeField.textContent = `00:${time}`;
       }
     };
-    this.timeContainer = setInterval(timer, 1000);
+    this.currentTimer = setInterval(timer, 1000);
   }
 }
 

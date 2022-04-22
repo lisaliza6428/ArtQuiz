@@ -61,18 +61,23 @@
   margin-top: 20px;
   font-size: 20px;
   transition: 1s;
+  width: 150px;
   .settings__link {
     margin-right: 5px;
     transition: 1s;
   }
   &:hover {
     .settings__link {
-    transform: rotate(90deg);
-    transition: 1s;
+      transform: rotate(90deg);
+      transition: 1s;
     }
     .set {
-    color: #ffbca2;
+      color: #ffbca2;
     }
+  }
+  .settings__link-img {
+    width: 36px;
+    height: 36px;
   }
 }
 

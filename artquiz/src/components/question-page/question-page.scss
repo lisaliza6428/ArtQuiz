@@ -266,4 +266,9 @@
     column-gap: 20px;
     justify-content: center;
   }
+  @media (max-width: 500px) {
+    row-gap: 8px;
+    column-gap: 8px;
+    margin: 10px 0;
+  }
 }

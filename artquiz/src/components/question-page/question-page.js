@@ -5,6 +5,7 @@ import {
   shuffleArray, getRandomNumber, getData, getRoundData,
 } from '../functions';
 import { sounds } from '../sounds';
+import { getAnswerPopupHTML, getFinishPopupHTML } from '../pop-ups/popups-html';
 
 class Question {
   categoryIndex = 0;
@@ -77,28 +78,29 @@ class Question {
       document.getElementById('question').innerText = 'Who is the author of this picture?';
       document.querySelector('.picture-container').classList.add('question-picture-wrapper');
       document.querySelector('.question-picture-wrapper').innerHTML = `<img class="question-picture" src="/assets/img/${this.roundData[this.currentQustionIndex].imageNum}.webp" alt="picture">`;
-
-      document.querySelector('.question-answers').addEventListener('click', (e) => {
-        e.stopImmediatePropagation();
-        if (e.target.tagName === 'BUTTON' && e.target.classList.contains('correct')) {
-          this.correctAnswerActions();
-          e.target.classList.add('correct-answer');
-        }
-        if (e.target.tagName === 'BUTTON' && !e.target.classList.contains('correct')) {
-          this.wrongAnswerActions();
-          e.target.classList.add('wrong-answer');
-        }
-      });
       document.querySelector('.question-answers').innerHTML = await this.getVariants(this.roundData[this.currentQustionIndex].authorEN);
+      this.listenAnswerButtons();
     };
-
     this.checkTimer();
+  }
+
+  listenAnswerButtons() {
+    document.querySelector('.question-answers').addEventListener('click', (e) => {
+      e.stopImmediatePropagation();
+      if (e.target.tagName === 'BUTTON' && e.target.classList.contains('correct')) {
+        this.correctAnswerActions();
+        e.target.classList.add('correct-answer');
+      }
+      if (e.target.tagName === 'BUTTON' && !e.target.classList.contains('correct')) {
+        this.wrongAnswerActions();
+        e.target.classList.add('wrong-answer');
+      }
+    });
   }
 
   async generatePicturesQuestion() {
     document.getElementById('question').innerHTML = `<div>Which is <span class = "colored">${this.roundData[this.currentQustionIndex].authorEN}</span> picture?</div>`;
     document.querySelector('.picture-container').classList.add('pictures-container');
-    const picturesContainer = document.querySelector('.pictures-container');
     const wrongAnswers = await
     this.generateWrongVariants(this.roundData[this.currentQustionIndex].imageNum);
     const arraySRC = [
@@ -107,17 +109,19 @@ class Question {
       `/assets/img/${wrongAnswers[1]}.webp`,
       `/assets/img/${wrongAnswers[2]}.webp`,
     ];
+
     const arrayAnswers = [];
     arraySRC.forEach((src) => {
       let correctClass = '';
       if (src === `/assets/img/${this.roundData[this.currentQustionIndex].imageNum}.webp`) {
         correctClass = 'correct';
       }
+
       arrayAnswers.push(`
-    <div class="image-wrapper ${correctClass}">
-      <img class="image-wrapper__picture" src="${src}" alt="picture">
-      <div class="image-wrapper__bg"></div>
-    </div>`);
+        <div class="image-wrapper ${correctClass}">
+          <img class="image-wrapper__picture" src="${src}" alt="picture">
+          <div class="image-wrapper__bg"></div>
+        </div>`);
     });
 
     let counter = arraySRC.length;
@@ -125,19 +129,8 @@ class Question {
     const checkLoaded = async () => {
       counter -= 1;
       if (counter === 0) {
-        picturesContainer.innerHTML = shuffleArray(arrayAnswers).join('');
-
-        picturesContainer.addEventListener('click', (e) => {
-          e.stopImmediatePropagation();
-          if (e.target.classList.contains('image-wrapper') && e.target.classList.contains('correct')) {
-            this.correctAnswerActions();
-            e.target.querySelector('.image-wrapper__bg').classList.add('correct-answer');
-          }
-          if (e.target.classList.contains('image-wrapper') && !e.target.classList.contains('correct')) {
-            this.wrongAnswerActions();
-            e.target.querySelector('.image-wrapper__bg').classList.add('wrong-answer');
-          }
-        });
+        document.querySelector('.pictures-container').innerHTML = shuffleArray(arrayAnswers).join('');
+        this.listenAnswerPictures();
       }
     };
 
@@ -147,6 +140,20 @@ class Question {
       image.onload = checkLoaded;
     });
     this.checkTimer();
+  }
+
+  listenAnswerPictures() {
+    document.querySelector('.pictures-container').addEventListener('click', (e) => {
+      e.stopImmediatePropagation();
+      if (e.target.classList.contains('image-wrapper') && e.target.classList.contains('correct')) {
+        this.correctAnswerActions();
+        e.target.querySelector('.image-wrapper__bg').classList.add('correct-answer');
+      }
+      if (e.target.classList.contains('image-wrapper') && !e.target.classList.contains('correct')) {
+        this.wrongAnswerActions();
+        e.target.querySelector('.image-wrapper__bg').classList.add('wrong-answer');
+      }
+    });
   }
 
   correctAnswerActions() {
@@ -175,22 +182,10 @@ class Question {
   }
 
   showAnswer(answer) {
-    const html = `
-    <div class="popup">
-      <div class="popup-wrapper">
-      <div class="popup-image">
-          <img class="popup-image__picture" src="/assets/img/${this.roundData[this.currentQustionIndex].imageNum}.webp" alt="">
-          <img class="popup-image__icon" src="/assets/svg/${answer}-answer.svg" alt="">
-      </div> 
-      <div class="picture-name">${this.roundData[this.currentQustionIndex].nameEN}</div>
-      <div class="picture-info">${this.roundData[this.currentQustionIndex].authorEN}, ${this.roundData[this.currentQustionIndex].year}</div>
-      <button class="button next" id="next-button">Next</button>
-    </div>`;
-
     const image = new Image();
     image.src = `/assets/img/${this.roundData[this.currentQustionIndex].imageNum}.webp`;
     image.onload = () => {
-      document.querySelector('.modal').innerHTML = html;
+      document.querySelector('.modal').innerHTML = getAnswerPopupHTML(this.roundData[this.currentQustionIndex], answer);
       document.getElementById('next-button').addEventListener('click', () => {
         if (this.currentQustionIndex < (QUESTIONS_COUNT - 1)) {
           this.currentQustionIndex += 1;
@@ -212,19 +207,7 @@ class Question {
     const img = new Image();
     img.src = '/assets/svg/finish_round_cup.svg';
     img.onload = () => {
-      document.querySelector('.modal').innerHTML = `
-      <div class="popup">
-        <div class="popup-wrapper">
-          <div class="finish">
-          <img class="finish__image" src="/assets/svg/finish_round_cup.svg" width ="166" alt="">
-          <div class="finish__text">Congratulations!</div>
-          <div class="finish__score">${this.correctAnswerCount}/${QUESTIONS_COUNT}</div>
-          <div class="finish__wrapper">
-            <a class="finish__button" href="#/" >Home</a>
-            <a class="finish__button" href="#/categories">Next Quiz</a>
-          </div>
-        </div>
-      </div>`;
+      document.querySelector('.modal').innerHTML = getFinishPopupHTML(this.correctAnswerCount);
       this.currentQustionIndex = 0;
       this.correctAnswerCount = 0;
     };

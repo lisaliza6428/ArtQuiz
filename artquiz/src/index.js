@@ -9,3 +9,4 @@ import './components/question-page/question-page';
 import './components/settings-page/settings';
 import './components/score-page/score-page';
 import './components/sounds';
+import './components/pop-ups/popups-html';

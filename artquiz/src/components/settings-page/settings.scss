@@ -74,6 +74,7 @@
 
 .sound-bar-bottom {
   width: 490px;
+  height: 23px;
   display: flex;
   justify-content: space-between;
   @media (max-width: 750px) {
@@ -265,7 +266,20 @@
     margin: 50px 4px 4px;
   }
   @media (max-width: 750px) {
-    margin: 40px auto;
+    margin: 40px auto 10px auto;
+    width: 240px;
+    height: 50px;
+  }
+}
+
+.reset-button {
+  display: block;
+  margin: 10px 4px 4px auto;
+  @media (max-width: 750px) {
+    margin: 10px 4px 4px;
+  }
+  @media (max-width: 750px) {
+    margin: 0px auto;
     width: 240px;
     height: 50px;
   }

@@ -31,6 +31,10 @@ export class LocalStorageUtil {
     localStorage.setItem(this.answersArray, JSON.stringify(array));
   }
 
+  clearAnswersArray() {
+    localStorage.setItem(this.answersArray, JSON.stringify(Array(240).fill('0')));
+  }
+
   getSettings() {
     const settings = localStorage.getItem(this.settings);
     if (settings !== null) return JSON.parse(settings);

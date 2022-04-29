@@ -18,6 +18,7 @@ class SettingsPage {
     this.generateTimerSetter();
     this.generateTimerValue();
     this.generateDefaultButton();
+    this.generateResetButton();
   }
 
   generateSoundBar() {
@@ -133,6 +134,16 @@ class SettingsPage {
       localStorageUtil.setSettings({ sound: 20, timer: true, timervalue: 20 });
       question.timer = true;
       this.render();
+    });
+    document.querySelector('.container').appendChild(button);
+  }
+
+  generateResetButton() {
+    const button = document.createElement('button');
+    button.classList.add('button', 'reset-button');
+    button.innerText = 'Reset Progress';
+    button.addEventListener('click', () => {
+      localStorageUtil.clearAnswersArray();
     });
     document.querySelector('.container').appendChild(button);
   }

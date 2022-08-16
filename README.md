@@ -1,5 +1,6 @@
-# ArtQuiz
-Visit: https://lizalisa6428-artquiz.netlify.app/
+# ArtQuiz-TS
+Deploy: https://lizalisa6428-artquiz.netlify.app/ <br>
+Code: https://github.com/lisaliza6428/ArtQuiz/tree/develop (branch "develop")
 
 <img src="https://user-images.githubusercontent.com/87124701/165902512-cbc81023-8837-49a1-a71f-4f658f104628.JPG" width=700 ></img>
 

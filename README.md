@@ -1,7 +1,7 @@
 # ArtQuiz
 Visit: https://lizalisa6428-artquiz.netlify.app/
 
-Stack: HTML, SASS, Javascript, Webpack
+Stack: HTML, SASS, TypeScript
 
 <img src="https://user-images.githubusercontent.com/87124701/165902512-cbc81023-8837-49a1-a71f-4f658f104628.JPG" width=700 ></img>
 
